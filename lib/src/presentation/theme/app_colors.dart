@@ -9,9 +9,10 @@ class AppColors {
   static const Color black = Color(0xFF000000);
   
   // Brand colors
-  static const Color splashBackground = Color(0xFFB4E878);
+  static const Color splashBackground = Color(0xFF37D592);
   static const Color primaryGreen = Color(0xFFB4E878); // Card background & button color
   static const Color wiseLogoGreen = Color(0xFF37D592); // Wise logo color
+  static const Color onboardingBackgroundDark = Color(0xFF2E4532); // Onboarding background color
   
   // Text colors
   static const Color textPrimary = Color(0xFF000000); // Main heading text
