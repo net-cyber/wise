@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:wise/src/core/router/route_name.dart';
 import 'package:wise/src/presentation/pages/widgets/balance_card.dart';
 import 'package:wise/src/presentation/pages/widgets/loading_widgets/balance_card_shimmer.dart';
 import 'package:wise/src/presentation/pages/widgets/loading_widgets/transaction_shimmer.dart';
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       case 0: // Home
         break;
       case 1: // Card
-        // context.goNamed(RouteName.card);
+        context.goNamed(RouteName.card);
         break;
       case 2: // Send
         // context.goNamed(RouteName.send);
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                     earnAmount: '100',
                   ),
               const SizedBox(height: 24),
-              
+             
               _isLoading 
                 ? const ShimmerContainer(width: 150, height: 40)
                 : const Text(
@@ -81,13 +82,24 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
               const SizedBox(height: 16),
-              
-              _isLoading 
+               Row(
+                children: [
+                  _isLoading 
                 ? const FilterChipsShimmer()
                 : const FilterChipButton(
                     label: 'All',
-                    isSelected: true,
+                    isSelected: false,
                   ),
+              // TODO: Add filter chips called interest
+              _isLoading 
+                ? const FilterChipsShimmer()
+                : const FilterChipButton(
+                    label: 'Interest',
+                      isSelected: true,
+                    ),
+                ],
+              ),
+              
               const SizedBox(height: 16),
               
               _isLoading ? const BalanceCardShimmer() : _buildBalanceCards(),

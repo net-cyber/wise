@@ -29,5 +29,12 @@ final router = GoRouter(
       path: '/${RouteName.home}',
       builder: (context, state) => const HomePage(),
     ),
+
+    // // Card
+    // GoRoute(
+    //   name: RouteName.card,
+    //   path: '/${RouteName.card}',
+    //   builder: (context, state) => const CardPage(),
+    // ),
   ],
 );
