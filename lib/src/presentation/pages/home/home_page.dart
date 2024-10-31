@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     label: 'All',
                     isSelected: false,
                   ),
-              // TODO: Add filter chips called interest
+              
               _isLoading 
                 ? const FilterChipsShimmer()
                 : const FilterChipButton(
@@ -127,20 +127,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: 'Card'),
-          BottomNavigationBarItem(icon: Icon(Icons.send), label: 'Send'),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Recipients'),
-          BottomNavigationBarItem(icon: Icon(Icons.grid_view), label: 'Manage'),
-        ],
       ),
     );
   }
