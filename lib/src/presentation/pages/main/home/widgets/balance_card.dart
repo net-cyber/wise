@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class BalanceCard extends StatelessWidget {
@@ -16,26 +17,62 @@ class BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      height: 200.h,
+     
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppColors.bottomBarGrey200,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.bottomBarGrey200, 
+        borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 25,
-            child: Text(flag, style: const TextStyle(fontSize: 24)),
+          // Flag
+          SizedBox(
+            width: 48.w,
+            height: 48.w,
+            child: ShaderMask(
+              shaderCallback: (Rect bounds) {
+                return LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AppColors.black, AppColors.transparent],
+                  stops: [1.0, 1.0],
+                ).createShader(bounds);
+              },
+              blendMode: BlendMode.dstIn,
+              child: Center(
+                child: Text(
+                  flag,
+                  style: TextStyle(
+                    fontSize: 42.sp,
+                  ),
+                ),
+              ),
+            ),
           ),
-          const SizedBox(height: 16),
+          const Spacer(),
+          
+          // Amount
           Text(
             amount,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.black,
+              height: 1,
+            ),
           ),
+          SizedBox(height: 4.h),
+          
+          // Currency
           Text(
             currency,
-            style: TextStyle(color: AppColors.textGrey),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: AppColors.black,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ],
       ),
