@@ -5,14 +5,14 @@ import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
 
 // GoRouter configuration
 final router = GoRouter(
-  initialLocation: RouteName.splash,
+  initialLocation: '/${RouteName.splash}',
   routes: [
     // Splash
     GoRoute(
       name: RouteName.splash,
-      path: RouteName.splash,
+      path: '/${RouteName.splash}',
       builder: (context, state) => const SplashPage(),
     ),
-
+ 
   ],
 );
