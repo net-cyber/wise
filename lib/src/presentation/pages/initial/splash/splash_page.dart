@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wise/src/core/constants/app_constants.dart';
+import 'package:wise/src/core/router/route_name.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class SplashPage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
     });
 
     if (_dragPosition <= -200) {
-      context.goNamed('login');
+      context.goNamed(RouteName.onboarding);
     }
   }
 
