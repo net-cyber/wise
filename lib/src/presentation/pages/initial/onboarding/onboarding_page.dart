@@ -59,7 +59,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     const Spacer(),
                     if (!isLastPage) ...[
-                      const CheckRatesButton(),
+                      CheckRatesButton(onPressed: _increaseProgress),
                       const SizedBox(height: 20),
                       GetStartedButton(onPressed: _increaseProgress),
                     ] else ...[
