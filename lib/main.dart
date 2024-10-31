@@ -21,14 +21,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFB4E878), 
+      backgroundColor: const Color(0xFFB4E878), // Light green background
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
