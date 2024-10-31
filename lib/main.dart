@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wise/src/core/constants/app_constants.dart';
 import 'package:wise/src/core/di/dependancy_manager.dart';
+import 'package:wise/src/core/utils/local_storage.dart';
 
-void main() {
+void main() async {
   setUpDependencies();
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorage.getInstance();
 
   runApp(const MyApp());
 }
