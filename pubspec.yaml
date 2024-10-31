@@ -18,6 +18,7 @@ dependencies:
   go_router: ^14.3.0
   flutter_native_splash: ^2.4.2
   shimmer: ^3.0.0
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:

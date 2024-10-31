@@ -10,7 +10,7 @@ import 'package:wise/src/presentation/pages/initial/onboarding/components/extras
 import 'package:wise/src/presentation/pages/initial/onboarding/components/extras/progress_indicator.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/components/texts/onboarding_text.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class OnboardingPage extends StatefulWidget {
   @override
   _OnboardingPageState createState() => _OnboardingPageState();
@@ -41,26 +41,29 @@ class _OnboardingPageState extends State<OnboardingPage> {
       body: SafeArea(
         child: Column(
           children: [
+            SizedBox(height: 50.h),
             OnboardingProgressIndicator(
               currentIndex: currentIndex,
               totalItems: _onboardingItems.length,
             ),
+            SizedBox(height: 20.h),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     OnboardingImage(
                       imagePath: _onboardingItems[currentIndex].image,
                     ),
+                    SizedBox(height: 60.h),
                     OnboardingText(
                       text: _onboardingItems[currentIndex].text,
                     ),
-                    const Spacer(),
+                  
                     if (!isLastPage) ...[
                       CheckRatesButton(onPressed: _increaseProgress),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       GetStartedButton(onPressed: _increaseProgress),
                     ] else ...[
                       const AuthenticationButtons(),
