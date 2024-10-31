@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wise/src/presentation/pages/main/home/widgets/shimmer_container.dart';
+import '../shimmer_container.dart';
 
 class TopBarShimmer extends StatelessWidget {
   const TopBarShimmer({super.key});

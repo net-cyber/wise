@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wise/src/core/router/route_name.dart';
-import 'package:wise/src/presentation/pages/home/card/card_page.dart';
-import 'package:wise/src/presentation/pages/home/home_page.dart';
-import 'package:wise/src/presentation/pages/home/shell_page.dart';
+import 'package:wise/src/presentation/pages/main/card/card_page.dart';
+import 'package:wise/src/presentation/pages/main/home/home_page.dart';
+import 'package:wise/src/presentation/pages/main/shell_page.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/onboarding_page.dart';
 import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
 
