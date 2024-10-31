@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+
   bool _isLoading = true;
 
   @override
@@ -35,28 +35,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
 
-    switch (index) {
-      case 0: // Home
-        break;
-      case 1: // Card
-        context.goNamed(RouteName.card);
-        break;
-      case 2: // Send
-        // context.goNamed(RouteName.send);
-        break;
-      case 3: // Recipients
-        // context.goNamed(RouteName.recipients);
-        break;
-      case 4: // Manage
-        // context.goNamed(RouteName.manage);
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
