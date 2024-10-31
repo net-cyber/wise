@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wise/src/core/constants/app_constants.dart';
+import 'package:wise/src/core/di/dependancy_manager.dart';
 
 void main() {
+  setUpDependencies();
+
   runApp(const MyApp());
 }
 
