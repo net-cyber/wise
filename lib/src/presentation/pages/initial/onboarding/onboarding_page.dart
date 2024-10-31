@@ -60,7 +60,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     OnboardingText(
                       text: _onboardingItems[currentIndex].text,
                     ),
-                  
+                    SizedBox(height: 40.h),
                     if (!isLastPage) ...[
                       CheckRatesButton(onPressed: _increaseProgress),
                       SizedBox(height: 20.h),
