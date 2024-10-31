@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:wise/src/core/router/route_name.dart';
+import 'package:wise/src/presentation/pages/home/home_page.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/onboarding_page.dart';
 import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
 
@@ -20,6 +21,13 @@ final router = GoRouter(
       name: RouteName.onboarding,
       path: '/${RouteName.onboarding}',
       builder: (context, state) =>  OnboardingPage(),
+    ),
+
+    // Home
+    GoRoute(
+      name: RouteName.home,
+      path: '/${RouteName.home}',
+      builder: (context, state) => const HomePage(),
     ),
   ],
 );
