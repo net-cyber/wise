@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:wise/src/core/constants/app_constants.dart';
 import 'package:wise/src/model/onboarding_item.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/buttons/apple_signin_button.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/buttons/authentication_buttons.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/buttons/check_rates_button.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/buttons/custom_button.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/buttons/get_started_button.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/extras/onboarding_imgae.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/extras/progress_indicator.dart';
-import 'package:wise/src/presentation/pages/initial/onboarding/components/texts/onboarding_text.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/buttons/apple_signin_button.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/buttons/authentication_buttons.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/buttons/check_rates_button.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/buttons/custom_button.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/buttons/get_started_button.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/extras/onboarding_imgae.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/extras/progress_indicator.dart';
+import 'package:wise/src/presentation/pages/initial/onboarding/widget/texts/onboarding_text.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class OnboardingPage extends StatefulWidget {

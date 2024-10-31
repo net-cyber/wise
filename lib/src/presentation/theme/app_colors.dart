@@ -5,13 +5,25 @@ class AppColors {
   
   // Base colors
   static const Color white = Color(0xFFFFFFFF);
-  static const Color transparent = Color(0x00FFFFFF);
   static const Color black = Color(0xFF000000);
   
   // Brand colors
+  static const Color primaryGreen = Color(0xFFB4E878);  // Main background green
+  static const Color wiseLogoBlack = Color(0xFF000000); // Logo color
+  
+  // Gradient colors for the swipe indicator
+  static const Color gradientPink = Color(0xFFFF69B4);    // Pink shade
+  static const Color gradientPurple = Color(0xFF8A2BE2);  // Purple shade
+  static const Color gradientBlue = Color(0xFF00BFFF);    // Blue shade
+
+  // Bottom bar branding
+  static const Color bottomBarGrey = Color(0xFF333333);   // Bottom bar text/logo color
+
+  // Base colors
+  static const Color transparent = Color(0x00FFFFFF);
+  
+  // Brand colors
   static const Color splashBackground = Color(0xFF37D592);
-  static const Color primaryGreen = Color(0xFFB4E878); // Card background & button color
-  static const Color wiseLogoGreen = Color(0xFF37D592); // Wise logo color
   static const Color onboardingBackgroundDark = Color(0xFF2E4532); // Onboarding background color
   
   // Text colors
