@@ -18,7 +18,7 @@ class AppColors {
 
   // Bottom bar branding
   static const Color bottomBarGrey = Color(0xFF333333);   // Bottom bar text/logo color
-
+  static const Color bottomBarGrey200 = Color(0xFFE5E5E5);
   // Base colors
   static const Color transparent = Color(0x00FFFFFF);
   

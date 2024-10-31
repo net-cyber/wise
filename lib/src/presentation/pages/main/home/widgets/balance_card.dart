@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class BalanceCard extends StatelessWidget {
   final String flag;
@@ -17,7 +18,7 @@ class BalanceCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: AppColors.bottomBarGrey200,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -34,7 +35,7 @@ class BalanceCard extends StatelessWidget {
           ),
           Text(
             currency,
-            style: TextStyle(color: Colors.grey[600]),
+            style: TextStyle(color: AppColors.textGrey),
           ),
         ],
       ),
