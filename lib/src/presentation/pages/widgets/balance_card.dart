@@ -24,8 +24,8 @@ class BalanceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            radius: 15,
-            child: Text(flag),
+            radius: 25,
+            child: Text(flag, style: const TextStyle(fontSize: 24)),
           ),
           const SizedBox(height: 16),
           Text(
