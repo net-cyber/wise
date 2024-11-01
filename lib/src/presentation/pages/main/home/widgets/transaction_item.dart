@@ -18,51 +18,54 @@ class TransactionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16.h),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 25.r,
-            backgroundColor: AppColors.bottomBarGrey200,
-            child: Icon(
-              icon,
-              color: Colors.black,
-              size: 23.sp,
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 25.r,
+              backgroundColor: AppColors.bottomBarGrey200,
+              child: Icon(
+                icon,
+                color: Colors.black,
+                size: 23.sp,
+              ),
             ),
-          ),
-          SizedBox(width: 20.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17.sp,
+            SizedBox(width: 16.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15.sp,
+                    ),
                   ),
-                ),
-                SizedBox(height: 6.h),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
+                  SizedBox(height: 6.h),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Text(
-            amount,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 18.sp,
+            Text(
+              amount,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 18.sp,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
