@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class ActionButtons extends StatelessWidget {
   const ActionButtons({super.key});
@@ -37,19 +39,19 @@ class ActionButtons extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 56.w,
+            height: 56.h,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0xFFB5EA9A),
+              color: AppColors.primaryGreen,
             ),
             child: Icon(
               icon,
               color: Colors.black,
-              size: 24,
+              size: 26.sp,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             label,
             style: const TextStyle(
