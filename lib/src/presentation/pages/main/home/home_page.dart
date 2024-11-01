@@ -12,6 +12,7 @@ import 'package:wise/src/presentation/pages/main/home/widgets/transaction_item.d
 import 'package:wise/src/presentation/pages/main/home/widgets/filter_chip_button.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/filter_chips_shimmer.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/top_bar_shimmer.dart';
+import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -114,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                        SizedBox(height: 16.h),
-                      TransactionItem(
+                      const TransactionItem(
                         icon: Icons.arrow_upward,
                         title: 'For your Wise card',
                         subtitle: 'Paid · Today',
