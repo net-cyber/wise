@@ -17,8 +17,8 @@ class BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width * 0.6,
       height: 200.h,
-     
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: AppColors.bottomBarGrey200, 
@@ -28,26 +28,13 @@ class BalanceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Flag
-          SizedBox(
-            width: 48.w,
-            height: 48.w,
-            child: ShaderMask(
-              shaderCallback: (Rect bounds) {
-                return LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.black, AppColors.transparent],
-                  stops: [1.0, 1.0],
-                ).createShader(bounds);
-              },
-              blendMode: BlendMode.dstIn,
-              child: Center(
-                child: Text(
-                  flag,
-                  style: TextStyle(
-                    fontSize: 42.sp,
-                  ),
-                ),
+          Container(
+            width: 32.w,
+            height: 32.w,
+            child: Text(
+              flag,
+              style: TextStyle(
+                fontSize: 24.sp,
               ),
             ),
           ),
@@ -57,7 +44,7 @@ class BalanceCard extends StatelessWidget {
           Text(
             amount,
             style: TextStyle(
-              fontSize: 20.sp,
+              fontSize: 24.sp,
               fontWeight: FontWeight.w700,
               color: AppColors.black,
               height: 1,
@@ -69,7 +56,7 @@ class BalanceCard extends StatelessWidget {
           Text(
             currency,
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: 14.sp,
               color: AppColors.black,
               fontWeight: FontWeight.normal,
             ),

@@ -86,17 +86,18 @@ class HomePage extends ConsumerWidget {
   }
 
   Widget _buildBalanceCards(List<BalanceCardData> balances) {
-    return Row(
-      children: balances.map((balance) => Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: balances.map((balance) => Padding(
+          padding: EdgeInsets.only(right: 16.w),
           child: BalanceCard(
-            flag: balance.flag ,
+            flag: balance.flag,
             amount: balance.amount,
             currency: balance.currency,
           ),
-        ),
-      )).toList(),
+        )).toList(),
+      ),
     );
   }
 
