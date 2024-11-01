@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wise/src/core/router/route_name.dart';
+import 'package:wise/src/presentation/pages/main/home/riverpod/provider/home_provider.dart';
+import 'package:wise/src/presentation/pages/main/home/riverpod/state/home_state.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/balance_card.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/balance_card_shimmer.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/transaction_shimmer.dart';
@@ -13,34 +15,15 @@ import 'package:wise/src/presentation/pages/main/home/widgets/filter_chip_button
 import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/filter_chips_shimmer.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/top_bar_shimmer.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(homeNotifierProvider);
 
-class _HomePageState extends State<HomePage> {
-
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
-  }
-
-
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -49,88 +32,51 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _isLoading 
+              state.isLoading 
                 ? const TopBarShimmer()
-                : const TopBar(
-                    initials: 'JS',
-                    earnAmount: '100',
+                : TopBar(
+                    initials: state.initials,
+                    earnAmount: state.earnAmount,
                   ),
               const SizedBox(height: 24),
              
-              _isLoading 
+              state.isLoading 
                 ? const ShimmerContainer(width: 150, height: 40)
                 : const Text(
                     'Account',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
               const SizedBox(height: 16),
-               Row(
-                children: [
-                  _isLoading 
-                ? const FilterChipsShimmer()
-                : const FilterChipButton(
-                    label: 'All',
-                    isSelected: false,
-                  ),
               
-              _isLoading 
-                ? const FilterChipsShimmer()
-                : const FilterChipButton(
-                    label: 'Interest',
-                      isSelected: true,
-                    ),
+              Row(
+                children: [
+                  state.isLoading 
+                    ? const FilterChipsShimmer()
+                    : const FilterChipButton(
+                        label: 'All',
+                        isSelected: false,
+                      ),
+                  
+                  state.isLoading 
+                    ? const FilterChipsShimmer()
+                    : const FilterChipButton(
+                        label: 'Interest',
+                        isSelected: true,
+                      ),
                 ],
               ),
               
               const SizedBox(height: 16),
               
-              _isLoading ? const BalanceCardShimmer() : _buildBalanceCards(),
+              state.isLoading 
+                ? const BalanceCardShimmer() 
+                : _buildBalanceCards(state.balances),
+                
               const SizedBox(height: 24),
               
-              _isLoading
+              state.isLoading
                 ? const TransactionShimmer()
-                :  Column(
-                    children: [
-                      SizedBox(height: 20.h),
-                      Row(
-                        children: [
-                          Text(
-                            "Transactions",
-                            style: TextStyle(
-                              fontSize: 25.sp,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            "See all",
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.black,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                       SizedBox(height: 16.h),
-                      const TransactionItem(
-                        icon: Icons.arrow_upward,
-                        title: 'For your Wise card',
-                        subtitle: 'Paid · Today',
-                        amount: '9 SGD',
-                      ),
-                      const SizedBox(height: 16),
-                      const TransactionItem(
-                        icon: Icons.add,
-                        title: 'To your SGD balance',
-                        subtitle: 'Added · Today',
-                        amount: '24 SGD',
-                      ),
-                    ],
-                  ),
+                : _buildTransactions(state.transactions),
             ],
           ),
         ),
@@ -138,28 +84,59 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-  Widget _buildBalanceCards() {
-    return const Row(
-      children: [
-        Expanded(
+  Widget _buildBalanceCards(List<BalanceCardData> balances) {
+    return Row(
+      children: balances.map((balance) => Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: BalanceCard(
-            flag: '🇸🇬',
-            amount: '15.00',
-            currency: 'Singapore Dollar',
+            flag: balance.flag ,
+            amount: balance.amount,
+            currency: balance.currency,
           ),
         ),
-        SizedBox(width: 16),
-        Expanded(
-          child: BalanceCard(
-            flag: '🇦🇺',
-            amount: '0.00',
-            currency: 'Australian Dollar',
-          ),
-        ),
-      ],
+      )).toList(),
     );
   }
 
+  Widget _buildTransactions(List<TransactionData> transactions) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              "Transactions",
+              style: TextStyle(
+                fontSize: 25.sp,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              "See all",
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.black,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 16.h),
+        ...transactions.map((transaction) => Padding(
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: TransactionItem(
+            icon: transaction.icon,
+            title: transaction.title,
+            subtitle: transaction.subtitle,
+            amount: transaction.amount,
+          ),
+        )).toList(),
+      ],
+    );
+  }
 }
 
