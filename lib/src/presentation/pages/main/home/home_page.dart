@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:wise/src/core/router/route_name.dart';
@@ -86,8 +87,33 @@ class _HomePageState extends State<HomePage> {
               
               _isLoading
                 ? const TransactionShimmer()
-                : const Column(
+                :  Column(
                     children: [
+                      SizedBox(height: 20.h),
+                      Row(
+                        children: [
+                          Text(
+                            "Transactions",
+                            style: TextStyle(
+                              fontSize: 25.sp,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            "See all",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.black,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                       SizedBox(height: 16.h),
                       TransactionItem(
                         icon: Icons.arrow_upward,
                         title: 'For your Wise card',
