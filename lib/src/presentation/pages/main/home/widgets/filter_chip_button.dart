@@ -19,9 +19,9 @@ class FilterChipButton extends StatelessWidget {
       showCheckmark: false,
       label: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.black,
-          fontWeight: FontWeight.w500,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),
       ),
       backgroundColor: isSelected ? Colors.grey[200] : Colors.transparent,
