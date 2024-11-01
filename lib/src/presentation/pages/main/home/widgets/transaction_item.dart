@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class TransactionItem extends StatelessWidget {
   final IconData icon;
@@ -17,32 +19,37 @@ class TransactionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 16.h),
       child: Row(
         children: [
           CircleAvatar(
-            radius: 24,
-            backgroundColor: Colors.grey[200],
-            child: Icon(icon, color: Colors.black),
+            radius: 25.r,
+            backgroundColor: AppColors.bottomBarGrey200,
+            child: Icon(
+              icon,
+              color: Colors.black,
+              size: 23.sp,
+            ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 20.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17.sp,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 6.h),
                 Text(
                   subtitle,
                   style: TextStyle(
                     color: Colors.grey[600],
-                    fontSize: 14,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -50,9 +57,9 @@ class TransactionItem extends StatelessWidget {
           ),
           Text(
             amount,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 18.sp,
             ),
           ),
         ],
