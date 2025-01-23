@@ -7,6 +7,7 @@ class CardCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      
       height: 260,
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 5),

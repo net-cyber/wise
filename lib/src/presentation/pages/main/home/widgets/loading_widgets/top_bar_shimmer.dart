@@ -10,6 +10,7 @@ class TopBarShimmer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ShimmerContainer(
+          
           width: 40,
           height: 40,
           borderRadius: BorderRadius.circular(20),

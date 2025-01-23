@@ -15,21 +15,20 @@ class FilterChipButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilterChip(
-      selected: isSelected,
-      showCheckmark: false,
+      color: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
       label: Text(
         label,
         style: TextStyle(
-          color: Colors.black,
+          color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
         ),
       ),
-      backgroundColor: isSelected ? Colors.grey[200] : Colors.transparent,
+      backgroundColor: isSelected ? Theme.of(context).colorScheme.surface : Colors.transparent,
       selectedColor: Colors.transparent,
       shape: isSelected 
         ? const StadiumBorder()
         : StadiumBorder(
-            side: BorderSide(color: Colors.grey[300]!),
+            side: BorderSide(color: Theme.of(context).colorScheme.outline),
           ),
       onSelected: (_) => onSelected?.call(),
     );

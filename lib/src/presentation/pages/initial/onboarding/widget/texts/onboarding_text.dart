@@ -16,7 +16,7 @@ class OnboardingText extends StatelessWidget {
         fontWeight: FontWeight.w900,
         height: 1.1,
         letterSpacing: -1.5,
-        color: Colors.black,
+        color: Theme.of(context).colorScheme.onSurface,
       ),
       textAlign: TextAlign.center,
     );

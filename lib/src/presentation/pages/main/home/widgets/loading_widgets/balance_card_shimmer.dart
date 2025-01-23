@@ -10,6 +10,7 @@ class BalanceCardShimmer extends StatelessWidget {
       children: [
         Expanded(
           child: ShimmerContainer(
+            
             width: double.infinity,
             height: 120,
             borderRadius: BorderRadius.circular(12),

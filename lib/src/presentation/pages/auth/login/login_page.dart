@@ -17,7 +17,6 @@ class LoginPage extends ConsumerWidget {
     final loginNotifier = ref.watch(loginProvider.notifier);
     return Scaffold(
       
-      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -28,19 +27,19 @@ class LoginPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 16.h),
-              IconButton(
+             context.canPop() ? IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () => Navigator.pop(context),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
-              ),
+              ) : const SizedBox.shrink(),
               SizedBox(height: 24.h),
               Text(
                 'Enter your email address',
                 style: TextStyle(
                   fontSize: 32.sp,
                   fontWeight: FontWeight.w700,
-                  color: Colors.black,
+                  
                 ),
               ),
               SizedBox(height: 24.h),
@@ -75,7 +74,7 @@ class LoginPage extends ConsumerWidget {
                 'By registering, you accept our Terms of Use and Privacy Policy.',
                 style: TextStyle(
                   fontSize: 14.sp,
-                  color: Colors.grey[600],
+                
                 ),
               ),
               SizedBox(height: 16.h),
@@ -88,18 +87,18 @@ class LoginPage extends ConsumerWidget {
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.splashBackground,
+                    backgroundColor: loginState.isEmailNotValid ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.primaryContainer,
                     padding: EdgeInsets.symmetric(vertical: 15.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    disabledBackgroundColor: Colors.grey[300],
+                    disabledBackgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                   ),
                   child: Text(
                     'Continue',
                     style: TextStyle(
                       fontSize: 18.sp,
-                      color: loginState.isEmailNotValid ? AppColors.black : Colors.grey[600],
+                      color: loginState.isEmailNotValid ? Theme.of(context).colorScheme.onSurface : Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),

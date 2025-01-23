@@ -5,11 +5,11 @@ class CardAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SliverAppBar(
-      backgroundColor: Colors.white,
+    return SliverAppBar(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       elevation: 0,
       pinned: true,
-      expandedHeight: 160,
+      expandedHeight: 60,
       collapsedHeight: 80,
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1.0,
@@ -17,7 +17,7 @@ class CardAppBar extends StatelessWidget {
         title: Text(
           'Cards',
           style: TextStyle(
-            color: Colors.black,
+           
             fontSize: 34,
             fontWeight: FontWeight.bold,
           ),

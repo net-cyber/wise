@@ -21,7 +21,7 @@ class RegisterPage extends ConsumerWidget {
     final registerState = ref.watch(registerProvider);
     final registerNotifier = ref.watch(registerProvider.notifier);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -44,7 +44,7 @@ class RegisterPage extends ConsumerWidget {
                     style: TextStyle(
                       fontSize: 32.sp,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   SizedBox(height: 24.h),
@@ -119,7 +119,7 @@ class RegisterPage extends ConsumerWidget {
                     'By registering, you accept our Terms of Use and Privacy Policy.',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: Colors.grey[600],
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -132,18 +132,19 @@ class RegisterPage extends ConsumerWidget {
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: registerNotifier.isFormValid ? AppColors.splashBackground : Colors.grey[300],
+
+                        backgroundColor: registerNotifier.isFormValid ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.onInverseSurface,
                         padding: EdgeInsets.symmetric(vertical: 15.h),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
-                        disabledBackgroundColor: Colors.grey[300],
+                        disabledBackgroundColor: Theme.of(context).colorScheme.onInverseSurface,
                       ),
                       child: Text(
                         'Continue',
                         style: TextStyle(
                               fontSize: 18.sp,
-                              color: registerNotifier.isFormValid ? AppColors.black : Colors.grey[600],
+                              color: registerNotifier.isFormValid ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.onPrimaryFixedVariant,
                         ),
                       ),
                     ),

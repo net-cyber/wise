@@ -52,10 +52,10 @@ class OutlinedBorderTextField extends StatelessWidget {
               width: 1.r,
               style: BorderStyle.solid,
               color: isError
-                  ? AppColors.red
+                  ? Theme.of(context).colorScheme.error
                   : isSuccess
-                      ? AppColors.textGreen
-                      : AppColors.textGrey,
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.onPrimary,
             ),
           ),
           child: ClipRRect(
@@ -116,10 +116,10 @@ class OutlinedBorderTextField extends StatelessWidget {
                   letterSpacing: -0.3,
                   fontSize: 12.sp,
                   color: isError
-                      ? AppColors.red
+                      ? Theme.of(context).colorScheme.error
                       : isSuccess
-                          ? AppColors.textGreen
-                          : AppColors.black,
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
             ],

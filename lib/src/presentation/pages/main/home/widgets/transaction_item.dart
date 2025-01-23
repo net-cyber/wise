@@ -21,15 +21,22 @@ class TransactionItem extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+        ),
+        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
         child: Row(
           children: [
             CircleAvatar(
               radius: 25.r,
-              backgroundColor: AppColors.bottomBarGrey200,
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
               child: Icon(
                 icon,
-                color: Colors.black,
+               
                 size: 23.sp,
               ),
             ),
@@ -49,7 +56,6 @@ class TransactionItem extends StatelessWidget {
                   Text(
                     subtitle,
                     style: TextStyle(
-                      color: Colors.grey[600],
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
                     ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:wise/src/presentation/pages/main/card/widgets/action_buttons.dart';
-import 'package:wise/src/presentation/pages/main/card/widgets/apple_wallet_button.dart';
 import 'package:wise/src/presentation/pages/main/card/widgets/card_app_bar.dart';
 import 'package:wise/src/presentation/pages/main/card/widgets/card_carousel.dart';
 import 'package:wise/src/presentation/pages/main/card/widgets/card_number.dart';
@@ -10,8 +9,7 @@ class CardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.white,
+    return Scaffold(
       body: CustomScrollView(
         slivers: [
           CardAppBar(),
@@ -28,9 +26,8 @@ class CardPage extends StatelessWidget {
                     children: [
                       CardNumber(),
                       SizedBox(height: 40),
-                      ActionButtons(),
+                      ActionButtons(context:  context),
                       SizedBox(height: 40),
-                      AppleWalletButton(),
                     ],
                   ),
                 ),

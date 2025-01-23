@@ -8,6 +8,7 @@ class OnboardingImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+    
       width: double.infinity,
       height: 300.h,
       child: Image.asset(imagePath, height: 300.h),

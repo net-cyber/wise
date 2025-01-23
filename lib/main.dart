@@ -16,7 +16,7 @@ void main() async {
   await LocalStorage.getInstance();
      SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: AppColors.transparent,
+      statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       statusBarBrightness: Brightness.dark,
     ),

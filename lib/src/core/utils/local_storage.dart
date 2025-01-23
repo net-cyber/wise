@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wise/src/core/constants/app_constants.dart';
 import 'package:wise/src/core/utils/local_storage_key.dart';
 
 class LocalStorage {
@@ -103,4 +106,22 @@ class LocalStorage {
     }
     await _preferences?.clear();
   }
+  // set app theme mode
+    Future<void> setAppThemeMode(bool isDarkMode) async {
+      log('setAppThemeMode: $isDarkMode');
+    if (_preferences != null) {
+      await _preferences!.setBool(AppConstants.keyAppThemeMode, isDarkMode);
+    }
+  }
+
+  bool getAppThemeMode() {
+    log('getAppThemeMode ${_preferences?.getBool(AppConstants.keyAppThemeMode)}');
+    return _preferences?.getBool(AppConstants.keyAppThemeMode) ?? false;
+  }
+
+  void deleteAppThemeMode() {
+    log('deleteAppThemeMode');
+    _preferences?.remove(AppConstants.keyAppThemeMode);
+  }
+
 }

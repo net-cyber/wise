@@ -21,19 +21,20 @@ class BalanceCard extends StatelessWidget {
       height: 200.h,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppColors.bottomBarGrey200, 
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Flag
-          Container(
-            width: 32.w,
-            height: 32.w,
+          SizedBox(
+            width: 50.w,
+            height: 50.w,
             child: Text(
               flag,
               style: TextStyle(
+               
                 fontSize: 24.sp,
               ),
             ),
@@ -46,7 +47,7 @@ class BalanceCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.w700,
-              color: AppColors.black,
+              
               height: 1,
             ),
           ),
@@ -57,7 +58,7 @@ class BalanceCard extends StatelessWidget {
             currency,
             style: TextStyle(
               fontSize: 14.sp,
-              color: AppColors.black,
+           
               fontWeight: FontWeight.normal,
             ),
           ),

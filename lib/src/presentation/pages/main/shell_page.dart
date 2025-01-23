@@ -24,11 +24,11 @@ class ShellPage extends StatelessWidget {
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: _onNavigationItemSelected,
-        backgroundColor: Colors.white,
         elevation: 0,
         height: 60,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-        indicatorColor: Colors.transparent,
+        
+        backgroundColor: Theme.of(context).colorScheme.surface,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),

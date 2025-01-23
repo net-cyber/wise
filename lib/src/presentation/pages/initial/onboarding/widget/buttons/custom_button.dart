@@ -4,12 +4,12 @@ import 'package:wise/src/presentation/theme/app_colors.dart';
 class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
-  final Color backgroundColor;
+  final BuildContext context;
 
   const CustomButton({
     required this.onPressed,
     required this.text,
-    required this.backgroundColor,
+    required this.context,
   });
 
   @override
@@ -19,7 +19,7 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           padding: const EdgeInsets.symmetric(vertical: 15),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
@@ -27,9 +27,9 @@ class CustomButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(
+          style:  TextStyle(
             fontSize: 18,
-            color: AppColors.black,
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
           ),
         ),
       ),

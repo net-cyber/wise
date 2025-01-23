@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wise/src/presentation/pages/auth/login/riverpod/provider/login_provider.dart';
+import 'package:wise/src/presentation/riverpod/provider/app_provider.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-      final loginState = ref.watch(loginProvider);
+    final appNotifier = ref.watch(appProvider.notifier);
     final loginNotifier = ref.watch(loginProvider.notifier);
+    final themeState = ref.watch(appProvider);
     
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -40,18 +42,20 @@ class SettingsPage extends ConsumerWidget {
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   // Notification Section
-                  _buildNotificationSection(),
+                  _buildNotificationSection(context),
                   const SizedBox(height: 24),
 
                   // Main Settings
-                  _buildSettingsGroup([
+                  _buildSettingsGroup(context, [
                     SettingItem(
                       icon: Icons.dark_mode_outlined,
-                      title: 'Dark Mode',
+                      title: themeState.isDarkMode ? 'Light Mode' : 'Dark Mode',
                       onTap: () {},
                       trailing: Switch(
-                        value: false,
-                        onChanged: (value) {},
+                        value: themeState.isDarkMode,
+                        onChanged: (value) {
+                          appNotifier.changeTheme(value);
+                        },
                       ),
                     ),
                     SettingItem(
@@ -68,7 +72,7 @@ class SettingsPage extends ConsumerWidget {
                   const SizedBox(height: 24),
 
                   // Legal Settings
-                  _buildSettingsGroup([
+                  _buildSettingsGroup(context, [
                     SettingItem(
                       icon: Icons.lock_outline,
                       title: 'Privacy Policy',
@@ -88,7 +92,7 @@ class SettingsPage extends ConsumerWidget {
                   const SizedBox(height: 24),
 
                   // Support Settings
-                  _buildSettingsGroup([
+                  _buildSettingsGroup(context, [
                     SettingItem(
                       icon: Icons.mail_outline,
                       title: 'Contact',
@@ -103,7 +107,7 @@ class SettingsPage extends ConsumerWidget {
                   const SizedBox(height: 24),
 
                   // Logout Section
-                  _buildSettingsGroup([
+                  _buildSettingsGroup(context, [
                     SettingItem(
                       icon: Icons.logout,
                       title: 'Logout',
@@ -124,12 +128,15 @@ class SettingsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildNotificationSection() {
+  Widget _buildNotificationSection(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline,
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,20 +163,27 @@ class SettingsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildSettingsGroup(List<SettingItem> items) {
+  Widget _buildSettingsGroup(BuildContext context, List<SettingItem> items) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline,
+        ),
       ),
       child: Column(
-        children: items.map((item) => _buildSettingTile(item)).toList(),
+        children: items.map((item) => _buildSettingTile(context, item)).toList(),
       ),
     );
   }
 
-  Widget _buildSettingTile(SettingItem item) {
+  Widget _buildSettingTile(BuildContext context, SettingItem item) {
     return ListTile(
+      tileColor: Theme.of(context).colorScheme.surface,
+      textColor: Theme.of(context).colorScheme.onSurface,
+      iconColor: Theme.of(context).colorScheme.onSurface,
+      
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       leading: Icon(
         item.icon,

@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class ActionButtons extends StatelessWidget {
-  const ActionButtons({super.key});
+  const ActionButtons({super.key, required this.context});
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +15,19 @@ class ActionButtons extends StatelessWidget {
           icon: Icons.add,
           label: 'Add money',
           onTap: () {},
+          context: context,
         ),
         _buildActionButton(
           icon: Icons.credit_card_outlined,
           label: 'Card details',
           onTap: () {},
+          context: context,
         ),
         _buildActionButton(
           icon: Icons.ac_unit,
           label: 'Freeze card',
           onTap: () {},
+          context: context,
         ),
       ],
     );
@@ -33,6 +37,8 @@ class ActionButtons extends StatelessWidget {
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    required BuildContext context,
+    
   }) {
     return InkWell(
       onTap: onTap,
@@ -41,13 +47,13 @@ class ActionButtons extends StatelessWidget {
           Container(
             width: 56.w,
             height: 56.h,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primaryGreen,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
             ),
             child: Icon(
               icon,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onSurface,
               size: 26.sp,
             ),
           ),

@@ -7,5 +7,7 @@ class AppConstants {
   static const String openJar = 'assets/logo/open_jar.png';
   static const String baseUrl = 'http://10.0.2.2:8080/api/v1';
   static const String loadingAnimation = 'assets/animation/loading_animation.riv';
+  static const String loadingAnimationDark = 'assets/animation/loading_animation_dark.riv';
+  static const String keyAppThemeMode = 'app_theme_mode';
 }
 

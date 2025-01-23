@@ -16,21 +16,21 @@ class AuthenticationButtons extends StatelessWidget {
           children: [
             Expanded(
               child: CustomButton(
+                context: context,
                 onPressed: () {
                   context.pushNamed(RouteName.login);
                 },
                 text: 'Log in',
-                backgroundColor: AppColors.splashBackground,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: CustomButton(
+                context: context,
                 onPressed: () {
                   context.pushNamed(RouteName.register);
                 },
                 text: 'Register',
-                backgroundColor: AppColors.splashBackground,
               ),
             ),
           ],

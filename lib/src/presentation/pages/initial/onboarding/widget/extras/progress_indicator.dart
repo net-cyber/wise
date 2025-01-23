@@ -16,10 +16,11 @@ class OnboardingProgressIndicator extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: LinearProgressIndicator(
+        color: Theme.of(context).colorScheme.primary,
         value: (currentIndex + 1) / totalItems,
-        backgroundColor: Colors.grey[200],
-        valueColor: const AlwaysStoppedAnimation<Color>(
-          AppColors.onboardingBackgroundDark,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+        valueColor: AlwaysStoppedAnimation<Color>(
+          Theme.of(context).colorScheme.primary,
         ),
       ),
     );

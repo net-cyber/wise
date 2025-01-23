@@ -38,6 +38,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     bool isLastPage = currentIndex == _onboardingItems.length - 1;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -62,9 +63,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     ),
                     SizedBox(height: 40.h),
                     if (!isLastPage) ...[
-                      CheckRatesButton(onPressed: _increaseProgress),
+                      
                       SizedBox(height: 20.h),
-                      GetStartedButton(onPressed: _increaseProgress),
+                      GetStartedButton(onPressed: _increaseProgress, context: context),
                     ] else ...[
                       const AuthenticationButtons(),
                     ],

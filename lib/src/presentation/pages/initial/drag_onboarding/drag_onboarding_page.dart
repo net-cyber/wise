@@ -29,7 +29,7 @@ class DragOnboardingPage extends ConsumerWidget {
     final dragPosition = ref.watch(dragSplashProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.splashBackground,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -41,7 +41,7 @@ class DragOnboardingPage extends ConsumerWidget {
                 AppConstants.wiseLogo,
                 width: 80.w,
                 height: 80.h,
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const Spacer(),
@@ -55,10 +55,13 @@ class DragOnboardingPage extends ConsumerWidget {
                   child: Container(
                     width: 70.w,
                     height: 300.h,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       image: DecorationImage(
-                        image: AssetImage(AppConstants.splashBackground),
+                        image:  const AssetImage(AppConstants.splashBackground),
                         fit: BoxFit.cover,
+                        opacity: 0.5,
+                        colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.surfaceContainerHighest, BlendMode.color),
                       ),
                     ),
                   ),
@@ -74,11 +77,11 @@ class DragOnboardingPage extends ConsumerWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.splashBackground.withOpacity(0.8), 
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.8), 
                       ),
                       child: Icon(
                         Icons.arrow_upward,
-                        color: AppColors.white,
+                        color: Theme.of(context).colorScheme.onSurface,
                         size: 30.sp,
                       ),
                     ),

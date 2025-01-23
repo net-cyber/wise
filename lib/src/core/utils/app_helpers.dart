@@ -19,7 +19,7 @@ class AppHelpers {
         style: GoogleFonts.k2d(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: AppColors.white,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
       action: SnackBarAction(
@@ -54,7 +54,7 @@ class AppHelpers {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.r),
               border: Border.all(
-                color: AppColors.primaryGreen,
+                color: Theme.of(context).colorScheme.primary,
                 width: 2.r,
               ),
             ),
@@ -63,7 +63,7 @@ class AppHelpers {
               child: Text(
                 text,
                 style: GoogleFonts.k2d(
-                  color: AppColors.black,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 13.sp,
                   fontWeight: FontWeight.w500,
                   letterSpacing: -0.4,
