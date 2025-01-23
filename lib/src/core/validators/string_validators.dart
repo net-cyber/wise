@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:wise/src/core/validators/base_validator.dart';
 
@@ -76,6 +78,9 @@ class MatchValidator extends BaseValidator<String> {
 
   @override
   String? validate(String value) {
+    log('==> validate called with: $value');
+    log('==> otherField called with: $otherField');
+
     if (value != otherField) {
       return 'Passwords do not match';
     }

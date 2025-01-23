@@ -9,6 +9,8 @@ class RegisterState with _$RegisterState {
     @Default(false) bool showPassword,
     @Default(false) bool showConfirmPassword,
     @Default(false) bool isEmailInvalid,
+    @Default(false) bool isNameInvalid,
+    @Default(false) bool isUserNameInvalid,
     @Default(false) bool isPasswordInvalid,
     @Default(false) bool isConfirmPasswordInvalid,
     @Default('') String email,

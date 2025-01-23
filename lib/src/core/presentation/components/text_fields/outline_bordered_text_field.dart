@@ -64,6 +64,7 @@ class OutlinedBorderTextField extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8.r),
             child: TextFormField(
+              onChanged: onChanged,
               obscureText: obscureText ?? false,
               obscuringCharacter: '*',
               controller: textController,

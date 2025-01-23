@@ -20,6 +20,8 @@ mixin _$RegisterState {
   bool get showPassword => throw _privateConstructorUsedError;
   bool get showConfirmPassword => throw _privateConstructorUsedError;
   bool get isEmailInvalid => throw _privateConstructorUsedError;
+  bool get isNameInvalid => throw _privateConstructorUsedError;
+  bool get isUserNameInvalid => throw _privateConstructorUsedError;
   bool get isPasswordInvalid => throw _privateConstructorUsedError;
   bool get isConfirmPasswordInvalid => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
@@ -48,6 +50,8 @@ abstract class $RegisterStateCopyWith<$Res> {
       bool showPassword,
       bool showConfirmPassword,
       bool isEmailInvalid,
+      bool isNameInvalid,
+      bool isUserNameInvalid,
       bool isPasswordInvalid,
       bool isConfirmPasswordInvalid,
       String email,
@@ -77,6 +81,8 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
     Object? showPassword = null,
     Object? showConfirmPassword = null,
     Object? isEmailInvalid = null,
+    Object? isNameInvalid = null,
+    Object? isUserNameInvalid = null,
     Object? isPasswordInvalid = null,
     Object? isConfirmPasswordInvalid = null,
     Object? email = null,
@@ -102,6 +108,14 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
       isEmailInvalid: null == isEmailInvalid
           ? _value.isEmailInvalid
           : isEmailInvalid // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNameInvalid: null == isNameInvalid
+          ? _value.isNameInvalid
+          : isNameInvalid // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isUserNameInvalid: null == isUserNameInvalid
+          ? _value.isUserNameInvalid
+          : isUserNameInvalid // ignore: cast_nullable_to_non_nullable
               as bool,
       isPasswordInvalid: null == isPasswordInvalid
           ? _value.isPasswordInvalid
@@ -152,6 +166,8 @@ abstract class _$$RegisterStateImplCopyWith<$Res>
       bool showPassword,
       bool showConfirmPassword,
       bool isEmailInvalid,
+      bool isNameInvalid,
+      bool isUserNameInvalid,
       bool isPasswordInvalid,
       bool isConfirmPasswordInvalid,
       String email,
@@ -179,6 +195,8 @@ class __$$RegisterStateImplCopyWithImpl<$Res>
     Object? showPassword = null,
     Object? showConfirmPassword = null,
     Object? isEmailInvalid = null,
+    Object? isNameInvalid = null,
+    Object? isUserNameInvalid = null,
     Object? isPasswordInvalid = null,
     Object? isConfirmPasswordInvalid = null,
     Object? email = null,
@@ -204,6 +222,14 @@ class __$$RegisterStateImplCopyWithImpl<$Res>
       isEmailInvalid: null == isEmailInvalid
           ? _value.isEmailInvalid
           : isEmailInvalid // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNameInvalid: null == isNameInvalid
+          ? _value.isNameInvalid
+          : isNameInvalid // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isUserNameInvalid: null == isUserNameInvalid
+          ? _value.isUserNameInvalid
+          : isUserNameInvalid // ignore: cast_nullable_to_non_nullable
               as bool,
       isPasswordInvalid: null == isPasswordInvalid
           ? _value.isPasswordInvalid
@@ -249,6 +275,8 @@ class _$RegisterStateImpl extends _RegisterState {
       this.showPassword = false,
       this.showConfirmPassword = false,
       this.isEmailInvalid = false,
+      this.isNameInvalid = false,
+      this.isUserNameInvalid = false,
       this.isPasswordInvalid = false,
       this.isConfirmPasswordInvalid = false,
       this.email = '',
@@ -272,6 +300,12 @@ class _$RegisterStateImpl extends _RegisterState {
   @override
   @JsonKey()
   final bool isEmailInvalid;
+  @override
+  @JsonKey()
+  final bool isNameInvalid;
+  @override
+  @JsonKey()
+  final bool isUserNameInvalid;
   @override
   @JsonKey()
   final bool isPasswordInvalid;
@@ -304,7 +338,7 @@ class _$RegisterStateImpl extends _RegisterState {
 
   @override
   String toString() {
-    return 'RegisterState(isLoading: $isLoading, showPassword: $showPassword, showConfirmPassword: $showConfirmPassword, isEmailInvalid: $isEmailInvalid, isPasswordInvalid: $isPasswordInvalid, isConfirmPasswordInvalid: $isConfirmPasswordInvalid, email: $email, name: $name, userName: $userName, password: $password, confirmPassword: $confirmPassword, validationErrors: $validationErrors)';
+    return 'RegisterState(isLoading: $isLoading, showPassword: $showPassword, showConfirmPassword: $showConfirmPassword, isEmailInvalid: $isEmailInvalid, isNameInvalid: $isNameInvalid, isUserNameInvalid: $isUserNameInvalid, isPasswordInvalid: $isPasswordInvalid, isConfirmPasswordInvalid: $isConfirmPasswordInvalid, email: $email, name: $name, userName: $userName, password: $password, confirmPassword: $confirmPassword, validationErrors: $validationErrors)';
   }
 
   @override
@@ -320,6 +354,10 @@ class _$RegisterStateImpl extends _RegisterState {
                 other.showConfirmPassword == showConfirmPassword) &&
             (identical(other.isEmailInvalid, isEmailInvalid) ||
                 other.isEmailInvalid == isEmailInvalid) &&
+            (identical(other.isNameInvalid, isNameInvalid) ||
+                other.isNameInvalid == isNameInvalid) &&
+            (identical(other.isUserNameInvalid, isUserNameInvalid) ||
+                other.isUserNameInvalid == isUserNameInvalid) &&
             (identical(other.isPasswordInvalid, isPasswordInvalid) ||
                 other.isPasswordInvalid == isPasswordInvalid) &&
             (identical(
@@ -344,6 +382,8 @@ class _$RegisterStateImpl extends _RegisterState {
       showPassword,
       showConfirmPassword,
       isEmailInvalid,
+      isNameInvalid,
+      isUserNameInvalid,
       isPasswordInvalid,
       isConfirmPasswordInvalid,
       email,
@@ -368,6 +408,8 @@ abstract class _RegisterState extends RegisterState {
       final bool showPassword,
       final bool showConfirmPassword,
       final bool isEmailInvalid,
+      final bool isNameInvalid,
+      final bool isUserNameInvalid,
       final bool isPasswordInvalid,
       final bool isConfirmPasswordInvalid,
       final String email,
@@ -386,6 +428,10 @@ abstract class _RegisterState extends RegisterState {
   bool get showConfirmPassword;
   @override
   bool get isEmailInvalid;
+  @override
+  bool get isNameInvalid;
+  @override
+  bool get isUserNameInvalid;
   @override
   bool get isPasswordInvalid;
   @override

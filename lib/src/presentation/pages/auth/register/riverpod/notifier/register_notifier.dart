@@ -24,6 +24,8 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
   RegisterNotifier(
     this._authRepository,
   ) : super(const RegisterState()){
+      log('==> RegisterNotifier called with: ${state.password}');
+
         // Setup validation pipes
     addValidationPipe('email', ValidationPipe([
       RequiredValidator(),
@@ -45,43 +47,94 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
       RequiredValidator(),
       MinLengthValidator(3),
     ]));
+  }
 
-    addValidationPipe('confirmPassword', ValidationPipe([
+  ValidationPipe<String> _getConfirmPasswordValidationPipe() {
+    return ValidationPipe([
+      MatchValidator(state.password),
       RequiredValidator(),
       MinLengthValidator(8),
-      // add the password current field
-      MatchValidator(state.password),
-    ]));
+    ]);
   }
 
   void setPassword(String password) {
-    state = state.copyWith(password: password.trim(), isPasswordInvalid: false);
+    log('==> setPassword called with: $password');
+    final result = validateField('password', password);
+    log('==> password: $password');
+    if (!result.isValid && result.error != null) {
+      state = state.copyWith(password: password.trim(), isPasswordInvalid: true, validationErrors: {
+        'password': result.error!,
+      });
+    } else {
+      state = state.copyWith(password: password.trim(), isPasswordInvalid: false);
+    }
   }
 
   void setConfirmPassword(String password) {
-    state = state.copyWith(
-      confirmPassword: password.trim(),
-      isConfirmPasswordInvalid: false,
-    );
+   final pipe = _getConfirmPasswordValidationPipe();
+    final result = pipe.validate(password);
+    log('==> confirmPassword: $password');
+    if (!result.isValid && result.error != null) {
+      state = state.copyWith(
+        confirmPassword: password.trim(), 
+        isConfirmPasswordInvalid: true, 
+        validationErrors: {
+          'confirmPassword': result.error!,
+        }
+      );
+    } else {
+      state = state.copyWith(
+        confirmPassword: password.trim(), 
+        isConfirmPasswordInvalid: false
+      );
+    }
   }
 
-  void setFirstName(String name) {
-    state = state.copyWith(name: name.trim());
+  void setName(String name) {
+    log('==> setName called with: $name');
+    print('==> setName called with: $name');
+     final result = validateField('name', name);
+     log('==> name: $name');
+       if (!result.isValid && result.error != null) {
+      state = state.copyWith(name: name.trim(), isNameInvalid: true, validationErrors: {
+        'name': result.error!,
+      });
+    } else {
+      state = state.copyWith(name: name.trim(), isNameInvalid: false);
+    }
   }
 
   void setEmail(String value) {
-    state = state.copyWith(email: value.trim(), isEmailInvalid: false);
+    final result = validateField('email', value);
+    log('==> email: $value');
+    if (!result.isValid && result.error != null) {
+      state = state.copyWith(email: value.trim(), isEmailInvalid: true, validationErrors: {
+        'email': result.error!,
+      });
+    } else {
+      state = state.copyWith(email: value.trim(), isEmailInvalid: false);
+    }
   }
 
   void setUserName(String name) {
-    state = state.copyWith(userName: name.trim());
+    final result = validateField('userName', name);
+    log('==> userName: $name');
+    if (!result.isValid && result.error != null) {
+      state = state.copyWith(userName: name.trim(), isUserNameInvalid: true, validationErrors: {
+        'userName': result.error!,
+      });
+    } else {
+      state = state.copyWith(userName: name.trim(), isUserNameInvalid: false);
+    }
   }
 
   void toggleShowPassword() {
+    log('==> showPassword: ${!state.showPassword}');
     state = state.copyWith(showPassword: !state.showPassword);
   }
 
   void toggleShowConfirmPassword() {
+    log('==> showConfirmPassword: ${!state.showConfirmPassword}');
     state = state.copyWith(showConfirmPassword: !state.showConfirmPassword);
   }
 
@@ -136,5 +189,27 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
         AppHelpers.showNoConnectionSnackBar(context);
       }
     }
+  }
+
+  bool get isFormValid {
+    // Check if all required fields are not empty
+    if (state.email.isEmpty || 
+        state.password.isEmpty || 
+        state.confirmPassword.isEmpty || 
+        state.name.isEmpty || 
+        state.userName.isEmpty) {
+      return false;
+    }
+
+    // Check if any field has validation errors
+    if (state.isEmailInvalid || 
+        state.isPasswordInvalid || 
+        state.isConfirmPasswordInvalid || 
+        state.isNameInvalid || 
+        state.isUserNameInvalid) {
+      return false;
+    }
+
+    return true;
   }
 }

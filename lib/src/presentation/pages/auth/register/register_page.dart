@@ -1,68 +1,24 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wise/src/core/presentation/components/text_fields/outline_bordered_text_field.dart';
 import 'package:wise/src/core/router/route_name.dart';
+import 'package:wise/src/presentation/pages/auth/register/riverpod/notifier/register_notifier.dart';
+import 'package:wise/src/presentation/pages/auth/register/riverpod/provider/register_provider.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPage extends ConsumerWidget {
   const RegisterPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  // Update validation variables
-  bool _isNameValid = false;
-  bool _isUsernameValid = false;
-  bool _isEmailValid = false;
-  bool _isPasswordValid = false;
-  bool _isConfirmPasswordValid = false;
-  String _password = '';
-  String _confirmPassword = '';
-
-  // Add validation methods
-  void _validateName(String value) {
-    setState(() {
-      _isNameValid = value.length >= 2;
-    });
-  }
-
-  void _validateUsername(String value) {
-    setState(() {
-      _isUsernameValid = value.length >= 3;
-    });
-  }
-
-  void _validateEmail(String value) {
-    setState(() {
-      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-      _isEmailValid = emailRegex.hasMatch(value);
-    });
-  }
-
-  void _validatePassword(String value) {
-    setState(() {
-      _password = value;
-      _isPasswordValid = value.length >= 6;
-    });
-  }
-
-  void _validateConfirmPassword(String value) {
-    setState(() {
-      _confirmPassword = value;
-      _isConfirmPasswordValid = value == _password;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    
+    
+    final registerState = ref.watch(registerProvider);
+    final registerNotifier = ref.watch(registerProvider.notifier);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -94,49 +50,49 @@ class _RegisterPageState extends State<RegisterPage> {
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Name',
-                    onChanged: _validateName,
+                    onChanged: registerNotifier.setName,
                     inputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
-                    isError: !_isNameValid,
-                    descriptionText: !_isNameValid ? 'Name must be at least 2 characters' : null,
+                    isError: registerState.isNameInvalid,
+                    descriptionText: registerState.isNameInvalid ? registerState.validationErrors['name'] : null,
                   ),
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Username',
-                    onChanged: _validateUsername,
+                    onChanged: registerNotifier.setUserName,
                     inputType: TextInputType.name,
                     textCapitalization: TextCapitalization.none,
-                    isError: !_isUsernameValid,
-                    descriptionText: !_isUsernameValid ? 'Username must be at least 3 characters' : null,
+                    isError: registerState.isUserNameInvalid,
+                    descriptionText: registerState.isUserNameInvalid ? registerState.validationErrors['userName'] : null,
                   ),
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Your email',
-                    onChanged: _validateEmail,
+                    onChanged: registerNotifier.setEmail,
                     inputType: TextInputType.emailAddress,
                     textCapitalization: TextCapitalization.none,
-                    isError: !_isEmailValid,
-                    descriptionText: !_isEmailValid ? 'Please enter a valid email' : null,
+                    isError: registerState.isEmailInvalid,
+                    descriptionText: registerState.isEmailInvalid ? registerState.validationErrors['email'] : null,
                   ),
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Your password',
-                    onChanged: _validatePassword,
+                    onChanged: registerNotifier.setPassword,
                     inputType: TextInputType.visiblePassword,
                     obscureText: true,
                     textCapitalization: TextCapitalization.none,
-                    isError: !_isPasswordValid,
-                    descriptionText: !_isPasswordValid ? 'Password must be at least 6 characters' : null,
+                    isError: registerState.isPasswordInvalid,
+                    descriptionText: registerState.isPasswordInvalid ? registerState.validationErrors['password'] : null,
                   ),
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Confirm password',
-                    onChanged: _validateConfirmPassword,
+                    onChanged: registerNotifier.setConfirmPassword,
                     inputType: TextInputType.visiblePassword,
                     obscureText: true,
                     textCapitalization: TextCapitalization.none,
-                    isError: !_isConfirmPasswordValid,
-                    descriptionText: !_isConfirmPasswordValid ? 'Passwords do not match' : null,
+                    isError: registerState.isConfirmPasswordInvalid,
+                    descriptionText: registerState.isConfirmPasswordInvalid ? registerState.validationErrors['confirmPassword'] : null,
                   ),
                   const Spacer(),
                   Text(
@@ -150,13 +106,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _isEmailValid && _isPasswordValid && _isConfirmPasswordValid
+                      onPressed: registerNotifier.isFormValid
                           ? () {
                               context.goNamed(RouteName.home);
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.splashBackground,
+                        backgroundColor: registerNotifier.isFormValid ? AppColors.splashBackground : Colors.grey[300],
                         padding: EdgeInsets.symmetric(vertical: 15.h),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
@@ -166,8 +122,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: Text(
                         'Continue',
                         style: TextStyle(
-                          fontSize: 18.sp,
-                          color: _isEmailValid ? AppColors.black : Colors.grey[600],
+                              fontSize: 18.sp,
+                              color: registerNotifier.isFormValid ? AppColors.black : Colors.grey[600],
                         ),
                       ),
                     ),
