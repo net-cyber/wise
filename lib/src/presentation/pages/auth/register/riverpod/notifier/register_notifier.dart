@@ -19,7 +19,11 @@ import '../state/register_state.dart';
 
 class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixin{
   final AuthRepository _authRepository;
-
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   RegisterNotifier(
     this._authRepository,
@@ -211,5 +215,15 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
     }
 
     return true;
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    userNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
   }
 }

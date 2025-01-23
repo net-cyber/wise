@@ -13,7 +13,6 @@ class OutlinedBorderTextField extends StatelessWidget {
   final TextEditingController? textController;
   final Function(String)? onChanged;
   final TextInputType? inputType;
-  final String? initialText;
   final String? descriptionText;
   final bool readOnly;
   final bool isError;
@@ -21,15 +20,14 @@ class OutlinedBorderTextField extends StatelessWidget {
   final TextCapitalization? textCapitalization;
   final TextInputAction? textInputAction;
 
-  const OutlinedBorderTextField({
-    Key? key,
+  const   OutlinedBorderTextField({
+    super.key,
     required this.label,
     this.suffixIcon,
     this.obscure,
     this.onChanged,
     this.textController,
     this.inputType,
-    this.initialText,
     this.descriptionText,
     this.readOnly = false,
     this.isError = false,
@@ -37,7 +35,7 @@ class OutlinedBorderTextField extends StatelessWidget {
     this.textCapitalization,
     this.textInputAction,
     
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +74,6 @@ class OutlinedBorderTextField extends StatelessWidget {
               cursorWidth: 1,
               // cursorColor: isDarkMode ? AppColors.white : AppColors.black,
               keyboardType: inputType,
-              initialValue: initialText,
               readOnly: readOnly,
               textCapitalization:
                   textCapitalization ?? TextCapitalization.sentences,

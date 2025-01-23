@@ -25,7 +25,7 @@ class RegisterPage extends ConsumerWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: registerState.isLoading ? const LoadingWidget() : SingleChildScrollView(
+          child: registerState.isLoading ? const LoadingWidget() :  SingleChildScrollView(
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -51,6 +51,7 @@ class RegisterPage extends ConsumerWidget {
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Name',
+                    textController: registerNotifier.nameController,
                     onChanged: registerNotifier.setName,
                     inputType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
@@ -60,6 +61,7 @@ class RegisterPage extends ConsumerWidget {
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Username',
+                    textController: registerNotifier.userNameController,
                     onChanged: registerNotifier.setUserName,
                     inputType: TextInputType.name,
                     textCapitalization: TextCapitalization.none,
@@ -69,6 +71,7 @@ class RegisterPage extends ConsumerWidget {
                   14.verticalSpace,
                   OutlinedBorderTextField(
                     label: 'Your email',
+                    textController: registerNotifier.emailController,
                     onChanged: registerNotifier.setEmail,
                     inputType: TextInputType.emailAddress,
                     textCapitalization: TextCapitalization.none,
@@ -80,6 +83,7 @@ class RegisterPage extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: OutlinedBorderTextField(
+                          textController: registerNotifier.passwordController,
                           obscure: registerState.showPassword,
                           label: 'Your password',
                           onChanged: registerNotifier.setPassword,
@@ -100,6 +104,7 @@ class RegisterPage extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: OutlinedBorderTextField(
+                          textController: registerNotifier.confirmPasswordController,
                           obscure: registerState.showConfirmPassword,
                           label: 'Confirm password',
                           onChanged: registerNotifier.setConfirmPassword,

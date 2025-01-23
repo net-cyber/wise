@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:wise/src/core/constants/app_constants.dart';
@@ -10,6 +12,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<ApiResult<Unit>> register(RegisterRequestParams request) async {
       final data = {'email': request.email, 'password': request.password, 'name': request.name, 'username': request.userName};
+      log('==> register data: $data');
        try {
       final client = inject<HttpService>().client(requireAuth: false);
       await client.post(
