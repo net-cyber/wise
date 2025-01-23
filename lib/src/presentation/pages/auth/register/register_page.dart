@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wise/src/core/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:wise/src/core/presentation/widgets/loading.dart';
 import 'package:wise/src/core/router/route_name.dart';
 import 'package:wise/src/presentation/pages/auth/register/riverpod/notifier/register_notifier.dart';
 import 'package:wise/src/presentation/pages/auth/register/riverpod/provider/register_provider.dart';
@@ -20,11 +21,11 @@ class RegisterPage extends ConsumerWidget {
     final registerState = ref.watch(registerProvider);
     final registerNotifier = ref.watch(registerProvider.notifier);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: SingleChildScrollView(
-
+          child: registerState.isLoading ? const LoadingWidget() : SingleChildScrollView(
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -128,7 +129,7 @@ class RegisterPage extends ConsumerWidget {
                     child: ElevatedButton(
                       onPressed: registerNotifier.isFormValid
                           ? () {
-                              context.goNamed(RouteName.home);
+                              registerNotifier.register(context);
                             }
                           : null,
                       style: ElevatedButton.styleFrom(

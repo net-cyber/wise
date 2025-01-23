@@ -13,7 +13,7 @@ class AuthRepositoryImpl extends AuthRepository {
        try {
       final client = inject<HttpService>().client(requireAuth: false);
       await client.post(
-        '${AppConstants.baseUrl}/auth/register',
+        'http://10.0.2.2:8080/api/v1/auth/register',
         data: data,
       );
       return const ApiResult.success(
