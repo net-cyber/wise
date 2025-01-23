@@ -1,39 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wise/src/core/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:wise/src/core/presentation/widgets/loading.dart';
 import 'package:wise/src/core/router/route_name.dart';
+import 'package:wise/src/presentation/pages/auth/login/riverpod/provider/login_provider.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
-  bool _isEmailValid = false;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
-  }
-
-  void _validateEmail(String value) {
-    setState(() {
-      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-      _isEmailValid = emailRegex.hasMatch(value);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginState = ref.watch(loginProvider);
+    final loginNotifier = ref.watch(loginProvider.notifier);
     return Scaffold(
+      backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: loginState.isLoading ? const LoadingWidget() : SingleChildScrollView(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -54,25 +43,32 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 24.h),
-              TextField(
-                controller: _emailController,
-                onChanged: _validateEmail,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Your email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+             14.verticalSpace,
+                  OutlinedBorderTextField(
+                    label: 'Your email',
+                    textController: loginNotifier.emailController,
+                    onChanged: loginNotifier.setEmail,
+                    inputType: TextInputType.emailAddress,
+                    textCapitalization: TextCapitalization.none,
+                    isError: loginState.isEmailNotValid,
+                    descriptionText: loginState.isEmailNotValid ? loginState.validationErrors['email'] : null,
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  14.verticalSpace,
+                   OutlinedBorderTextField(
+                    obscure: loginState.showPassword,
+                    label: 'Your password',
+                    textController: loginNotifier.passwordController,
+                    onChanged: loginNotifier.setPassword,
+                    inputType: TextInputType.visiblePassword,
+                    textCapitalization: TextCapitalization.none,
+                    isError: loginState.isPasswordNotValid,
+                    descriptionText: loginState.isPasswordNotValid ? loginState.validationErrors['password'] : null,
+                    suffixIcon: IconButton(
+                      icon: loginState.showPassword ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
+                      onPressed: loginNotifier.toggleShowPassword,
+                    ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: AppColors.black),
-                  ),
-                ),
-              ),
+                  14.verticalSpace,
               const Spacer(),
               Text(
                 'By registering, you accept our Terms of Use and Privacy Policy.',
@@ -85,9 +81,9 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _isEmailValid
+                  onPressed: loginNotifier.isFormValid
                       ? () {
-                          context.goNamed(RouteName.home);
+                          loginNotifier.login(context);
                         }
                       : null,
                   style: ElevatedButton.styleFrom(
@@ -102,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                     'Continue',
                     style: TextStyle(
                       fontSize: 18.sp,
-                      color: _isEmailValid ? AppColors.black : Colors.grey[600],
+                      color: loginState.isEmailNotValid ? AppColors.black : Colors.grey[600],
                     ),
                   ),
                 ),
@@ -111,6 +107,8 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
+      ),
+      ),
       ),
     );
   }

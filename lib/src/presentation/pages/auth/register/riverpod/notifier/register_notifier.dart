@@ -8,7 +8,7 @@ import 'package:wise/src/core/handlers/app_connectivity.dart';
 import 'package:wise/src/core/router/route_name.dart';
 import 'package:wise/src/core/validators/string_validators.dart';
 import 'package:wise/src/core/validators/validation_mixin.dart';
-import 'package:wise/src/presentation/pages/auth/login/riverpod/params/register_request_params.dart';
+import 'package:wise/src/presentation/pages/auth/register/params/register_request_params.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/widget/buttons/authentication_buttons.dart';
 import 'package:wise/src/repository/auth_repository.dart';
 

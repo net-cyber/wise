@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:wise/src/core/constants/app_constants.dart';
 import 'package:wise/src/core/di/injection.dart';
 import 'package:wise/src/core/handlers/handlers.dart';
-import 'package:wise/src/presentation/pages/auth/login/riverpod/params/register_request_params.dart';
+import 'package:wise/src/model/login_response.dart';
+import 'package:wise/src/presentation/pages/auth/login/riverpod/params/login_request_params.dart';
+import 'package:wise/src/presentation/pages/auth/register/params/register_request_params.dart';
 import 'package:wise/src/repository/auth_repository.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -16,7 +18,7 @@ class AuthRepositoryImpl extends AuthRepository {
        try {
       final client = inject<HttpService>().client(requireAuth: false);
       await client.post(
-        'http://10.0.2.2:8080/api/v1/auth/register',
+        '${AppConstants.baseUrl}/auth/register',
         data: data,
       );
       return const ApiResult.success(
@@ -24,6 +26,26 @@ class AuthRepositoryImpl extends AuthRepository {
       );
     } catch (e) {
       debugPrint('==> register failure: $e');
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  @override
+  Future<ApiResult<LoginResponse>> login(LoginRequestParams request) async {
+    final data = {'email': request.email, 'password': request.password};
+    log('==> login data: $data');
+    try {
+      final client = inject<HttpService>().client(requireAuth: false);
+      final response = await client.post(
+        '${AppConstants.baseUrl}/auth/login',
+        data: data,
+      );
+      final loginResponse = LoginResponse.fromJson(response.data);
+      return ApiResult.success(
+        data: loginResponse,
+      );
+    } catch (e) {
+      debugPrint('==> login failure: $e');
       return ApiResult.failure(error: NetworkExceptions.getDioException(e));
     }
   }

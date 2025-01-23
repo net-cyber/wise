@@ -79,10 +79,8 @@ class RegisterPage extends ConsumerWidget {
                     descriptionText: registerState.isEmailInvalid ? registerState.validationErrors['email'] : null,
                   ),
                   14.verticalSpace,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedBorderTextField(
+                
+                      OutlinedBorderTextField(
                           textController: registerNotifier.passwordController,
                           obscure: registerState.showPassword,
                           label: 'Your password',
@@ -91,19 +89,16 @@ class RegisterPage extends ConsumerWidget {
                           textCapitalization: TextCapitalization.none,
                           isError: registerState.isPasswordInvalid,
                         descriptionText: registerState.isPasswordInvalid ? registerState.validationErrors['password'] : null,
-                      ),
-                      ),
-                      IconButton(
-                        icon: registerState.showPassword ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                        onPressed: () => registerNotifier.toggleShowPassword(),
-                      ),
-                    ],
+                        suffixIcon: IconButton(
+                          icon: registerState.showPassword ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
+                          onPressed: registerNotifier.toggleShowPassword,
+                        ),
+                      
+                     
                   ),
                   14.verticalSpace,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedBorderTextField(
+                  
+                        OutlinedBorderTextField(
                           textController: registerNotifier.confirmPasswordController,
                           obscure: registerState.showConfirmPassword,
                           label: 'Confirm password',
@@ -112,14 +107,13 @@ class RegisterPage extends ConsumerWidget {
                           textCapitalization: TextCapitalization.none,
                           isError: registerState.isConfirmPasswordInvalid,
                         descriptionText: registerState.isConfirmPasswordInvalid ? registerState.validationErrors['confirmPassword'] : null,
+                        suffixIcon: IconButton(
+                          icon: registerState.showConfirmPassword ? const Icon(Icons.visibility_off) : const Icon(Icons.visibility),
+                          onPressed: registerNotifier.toggleShowConfirmPassword,
+                        ),
                       ),
-                      ),
-                      IconButton(
-                        icon: registerState.showConfirmPassword ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
-                        onPressed: () => registerNotifier.toggleShowConfirmPassword(),
-                      ),
-                    ],
-                  ),
+                     
+                  
                   const Spacer(),
                   Text(
                     'By registering, you accept our Terms of Use and Privacy Policy.',
