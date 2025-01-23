@@ -122,7 +122,7 @@ class LoginNotifier extends StateNotifier<LoginState> with ValidationMixin {
   void logout(BuildContext context) {
     LocalStorage.instance.deleteAccessToken();
     LocalStorage.instance.deleteRefreshToken();
-    context.goNamed(RouteName.login);
+    context.goNamed(RouteName.onboarding);
   }
 
   @override
