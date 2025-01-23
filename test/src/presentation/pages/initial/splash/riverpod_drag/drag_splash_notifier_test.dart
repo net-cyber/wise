@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wise/src/presentation/pages/initial/splash/riverpod_drag/drag_splash_notifier.dart';
+import 'package:wise/src/presentation/pages/initial/drag_onboarding/riverpod_drag/drag_splash_notifier.dart';
 
 void main() {
   late DragSplashNotifier notifier;

@@ -1,8 +1,8 @@
-export 'initial/splash/splash_page.dart';
+export 'initial/drag_onboarding/drag_onboarding_page.dart';
 export 'initial/onboarding/onboarding_page.dart';
-export 'initial/splash/riverpod_drag/drag_splash_notifier.dart';
-export 'initial/splash/riverpod_drag/drag_splash_provider.dart';
-export 'initial/splash/splash_page.dart';
+export 'initial/drag_onboarding/riverpod_drag/drag_splash_notifier.dart';
+export 'initial/drag_onboarding/riverpod_drag/drag_splash_provider.dart';
+export 'initial/drag_onboarding/drag_onboarding_page.dart';
 
 export 'main/shell_page.dart';
 export 'main/card/card_page.dart';

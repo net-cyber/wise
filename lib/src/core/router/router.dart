@@ -3,11 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:wise/src/core/router/route_name.dart';
 import 'package:wise/src/presentation/pages/auth/login/login_page.dart';
 import 'package:wise/src/presentation/pages/auth/register/register_page.dart';
+import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
 import 'package:wise/src/presentation/pages/main/card/card_page.dart';
 import 'package:wise/src/presentation/pages/main/home/home_page.dart';
 import 'package:wise/src/presentation/pages/main/shell_page.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/onboarding_page.dart';
-import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
+import 'package:wise/src/presentation/pages/initial/drag_onboarding/drag_onboarding_page.dart';
 
 final router = GoRouter(
   initialLocation: '/${RouteName.splash}',
@@ -18,7 +19,11 @@ final router = GoRouter(
       path: '/${RouteName.splash}',
       builder: (context, state) => const SplashPage(),
     ),
-
+    GoRoute(
+      name: RouteName.dragOnboarding,
+      path: '/${RouteName.dragOnboarding}',
+      builder: (context, state) => const DragOnboardingPage(),
+    ),
     // Onboarding
     GoRoute(
       name: RouteName.onboarding,
