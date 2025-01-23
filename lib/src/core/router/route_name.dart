@@ -10,4 +10,5 @@ class RouteName {
   static const manage = 'manage';
   static const login = 'login';
   static const register = 'register';
+  static const settings = 'settings';
 }

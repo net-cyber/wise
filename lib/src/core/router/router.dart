@@ -6,6 +6,7 @@ import 'package:wise/src/presentation/pages/auth/register/register_page.dart';
 import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
 import 'package:wise/src/presentation/pages/main/card/card_page.dart';
 import 'package:wise/src/presentation/pages/main/home/home_page.dart';
+import 'package:wise/src/presentation/pages/main/setting/setting_page.dart';
 import 'package:wise/src/presentation/pages/main/shell_page.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/onboarding_page.dart';
 import 'package:wise/src/presentation/pages/initial/drag_onboarding/drag_onboarding_page.dart';
@@ -35,6 +36,12 @@ final router = GoRouter(
       name: RouteName.login,
       path: '/${RouteName.login}',
       builder: (context, state) => const LoginPage(),
+    ),
+    // Settings
+    GoRoute(
+      name: RouteName.settings,
+      path: '/${RouteName.settings}',
+      builder: (context, state) => const SettingsPage(),
     ),
 
     // Register
@@ -96,7 +103,7 @@ final router = GoRouter(
             GoRoute(
               name: RouteName.manage,
               path: '/${RouteName.manage}',
-              builder: (context, state) => const Scaffold(), // Replace with ManagePage
+              builder: (context, state) => const SettingsPage(), // Replace with ManagePage
             ),
           ],
         ),

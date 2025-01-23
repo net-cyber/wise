@@ -101,6 +101,10 @@ class LoginNotifier extends StateNotifier<LoginState> with ValidationMixin {
       success: (data) {
         LocalStorage.instance.setAccessToken(data.accessToken);
         LocalStorage.instance.setRefreshToken(data.refreshToken);
+        // clear text fields
+        emailController.clear();
+        passwordController.clear();
+        
         state = state.copyWith(isLoading: false);
         context.goNamed(RouteName.home);
       },
@@ -113,5 +117,17 @@ class LoginNotifier extends StateNotifier<LoginState> with ValidationMixin {
           );
       },
     );
+  }
+
+  void logout(BuildContext context) {
+    LocalStorage.instance.clear();
+    context.goNamed(RouteName.login);
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }

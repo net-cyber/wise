@@ -16,6 +16,7 @@ class LoginPage extends ConsumerWidget {
     final loginState = ref.watch(loginProvider);
     final loginNotifier = ref.watch(loginProvider.notifier);
     return Scaffold(
+      
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Padding(

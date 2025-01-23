@@ -175,7 +175,12 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
-         
+          // clear text fields
+          emailController.clear();
+          passwordController.clear();
+          confirmPasswordController.clear();
+          nameController.clear();
+          userNameController.clear();
           context.pushNamed(RouteName.login);
         },
         failure: (failure) {
