@@ -56,7 +56,7 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
       MinLengthValidator(8),
     ]);
   }
-  
+
   void setPassword(String password) {
     log('==> setPassword called with: $password');
     final result = validateField('password', password);
@@ -172,7 +172,7 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
         success: (data) async {
           state = state.copyWith(isLoading: false);
          
-          context.goNamed(RouteName.login);
+          context.pushNamed(RouteName.login);
         },
         failure: (failure) {
           state = state.copyWith(isLoading: false);
