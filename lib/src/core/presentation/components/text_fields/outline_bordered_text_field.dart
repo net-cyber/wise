@@ -20,7 +20,6 @@ class OutlinedBorderTextField extends StatelessWidget {
   final bool isSuccess;
   final TextCapitalization? textCapitalization;
   final TextInputAction? textInputAction;
-  final bool? obscureText;
 
   const OutlinedBorderTextField({
     Key? key,
@@ -37,7 +36,7 @@ class OutlinedBorderTextField extends StatelessWidget {
     this.isSuccess = false,
     this.textCapitalization,
     this.textInputAction,
-    this.obscureText,
+    
   }) : super(key: key);
 
   @override
@@ -65,7 +64,7 @@ class OutlinedBorderTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.r),
             child: TextFormField(
               onChanged: onChanged,
-              obscureText: obscureText ?? false,
+              obscureText: obscure ?? false,
               obscuringCharacter: '*',
               controller: textController,
               style: GoogleFonts.k2d(

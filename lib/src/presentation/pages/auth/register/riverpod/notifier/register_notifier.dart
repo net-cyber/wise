@@ -56,7 +56,7 @@ class RegisterNotifier extends StateNotifier<RegisterState>  with ValidationMixi
       MinLengthValidator(8),
     ]);
   }
-
+  
   void setPassword(String password) {
     log('==> setPassword called with: $password');
     final result = validateField('password', password);

@@ -75,24 +75,44 @@ class RegisterPage extends ConsumerWidget {
                     descriptionText: registerState.isEmailInvalid ? registerState.validationErrors['email'] : null,
                   ),
                   14.verticalSpace,
-                  OutlinedBorderTextField(
-                    label: 'Your password',
-                    onChanged: registerNotifier.setPassword,
-                    inputType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    textCapitalization: TextCapitalization.none,
-                    isError: registerState.isPasswordInvalid,
-                    descriptionText: registerState.isPasswordInvalid ? registerState.validationErrors['password'] : null,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedBorderTextField(
+                          obscure: registerState.showPassword,
+                          label: 'Your password',
+                          onChanged: registerNotifier.setPassword,
+                          inputType: TextInputType.visiblePassword,
+                          textCapitalization: TextCapitalization.none,
+                          isError: registerState.isPasswordInvalid,
+                        descriptionText: registerState.isPasswordInvalid ? registerState.validationErrors['password'] : null,
+                      ),
+                      ),
+                      IconButton(
+                        icon: registerState.showPassword ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                        onPressed: () => registerNotifier.toggleShowPassword(),
+                      ),
+                    ],
                   ),
                   14.verticalSpace,
-                  OutlinedBorderTextField(
-                    label: 'Confirm password',
-                    onChanged: registerNotifier.setConfirmPassword,
-                    inputType: TextInputType.visiblePassword,
-                    obscureText: true,
-                    textCapitalization: TextCapitalization.none,
-                    isError: registerState.isConfirmPasswordInvalid,
-                    descriptionText: registerState.isConfirmPasswordInvalid ? registerState.validationErrors['confirmPassword'] : null,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedBorderTextField(
+                          obscure: registerState.showConfirmPassword,
+                          label: 'Confirm password',
+                          onChanged: registerNotifier.setConfirmPassword,
+                          inputType: TextInputType.visiblePassword,
+                          textCapitalization: TextCapitalization.none,
+                          isError: registerState.isConfirmPasswordInvalid,
+                        descriptionText: registerState.isConfirmPasswordInvalid ? registerState.validationErrors['confirmPassword'] : null,
+                      ),
+                      ),
+                      IconButton(
+                        icon: registerState.showConfirmPassword ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off),
+                        onPressed: () => registerNotifier.toggleShowConfirmPassword(),
+                      ),
+                    ],
                   ),
                   const Spacer(),
                   Text(
