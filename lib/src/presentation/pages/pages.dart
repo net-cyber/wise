@@ -4,7 +4,6 @@ export 'initial/splash/riverpod_drag/drag_splash_notifier.dart';
 export 'initial/splash/riverpod_drag/drag_splash_provider.dart';
 export 'initial/splash/splash_page.dart';
 
-export 'home/home_page.dart';
 export 'main/shell_page.dart';
 export 'main/card/card_page.dart';
 export 'main/card/widgets/action_buttons.dart';

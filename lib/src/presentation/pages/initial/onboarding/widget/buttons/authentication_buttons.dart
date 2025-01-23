@@ -17,7 +17,7 @@ class AuthenticationButtons extends StatelessWidget {
             Expanded(
               child: CustomButton(
                 onPressed: () {
-                  context.goNamed(RouteName.home);
+                  context.pushNamed(RouteName.login);
                 },
                 text: 'Log in',
                 backgroundColor: AppColors.splashBackground,
@@ -27,7 +27,7 @@ class AuthenticationButtons extends StatelessWidget {
             Expanded(
               child: CustomButton(
                 onPressed: () {
-                  context.goNamed(RouteName.home);
+                  context.pushNamed(RouteName.register);
                 },
                 text: 'Register',
                 backgroundColor: AppColors.splashBackground,
@@ -36,7 +36,7 @@ class AuthenticationButtons extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        AppleSignInButton(),
+        
       ],
     );
   }

@@ -5,6 +5,6 @@ class AppConstants {
   static const String wise_card = 'assets/logo/wise_card.png';
   static const String glob_coin  = 'assets/logo/glob_coin.png';
   static const String openJar = 'assets/logo/open_jar.png';
-  static const String baseUrl = 'https://api.wise.com';
+  static const String baseUrl = 'http://localhost:8080/api/v1/';
 }
 

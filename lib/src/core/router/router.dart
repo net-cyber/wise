@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wise/src/core/router/route_name.dart';
+import 'package:wise/src/presentation/pages/auth/login/login_page.dart';
+import 'package:wise/src/presentation/pages/auth/register/register_page.dart';
 import 'package:wise/src/presentation/pages/main/card/card_page.dart';
 import 'package:wise/src/presentation/pages/main/home/home_page.dart';
 import 'package:wise/src/presentation/pages/main/shell_page.dart';
@@ -22,6 +24,19 @@ final router = GoRouter(
       name: RouteName.onboarding,
       path: '/${RouteName.onboarding}',
       builder: (context, state) => OnboardingPage(),
+    ),
+    // Login
+    GoRoute(
+      name: RouteName.login,
+      path: '/${RouteName.login}',
+      builder: (context, state) => const LoginPage(),
+    ),
+
+    // Register
+    GoRoute(
+      name: RouteName.register,
+      path: '/${RouteName.register}',
+      builder: (context, state) => const RegisterPage(),
     ),
 
     // Shell Route

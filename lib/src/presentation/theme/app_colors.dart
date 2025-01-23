@@ -39,6 +39,9 @@ class AppColors {
   
   // Status Bar
   static const Color statusBarText = Color(0xFF000000); // Status bar icons/text
+
   
+  // red 
+  static const Color red = Color(0xFFF55353);
 
 }
