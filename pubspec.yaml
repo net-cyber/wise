@@ -25,6 +25,7 @@ dependencies:
   connectivity_plus: ^6.1.2
   flash: ^3.1.1
   rive: ^0.13.20
+  country_flags: ^3.2.0
 
 dev_dependencies:
   flutter_test:

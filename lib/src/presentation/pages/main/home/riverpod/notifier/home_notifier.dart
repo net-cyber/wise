@@ -1,51 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wise/src/core/handlers/network_exceptions.dart';
 import 'package:wise/src/presentation/pages/main/home/riverpod/state/home_state.dart';
+import 'package:wise/src/repository/exchange_rate_repository.dart';
 
 
 class HomeNotifier extends StateNotifier<HomeState> {
-  HomeNotifier() : super(HomeState()) {
-    _initializeData();
+  final ExchangeRateRepository _exchangeRateRepository;
+  HomeNotifier(this._exchangeRateRepository) : super(HomeState()) {
+    getExchangeRate();
   }
 
-  Future<void> _initializeData() async {
-    await Future.delayed(const Duration(seconds: 2));
-    
-    state = state.copyWith(
-      isLoading: false,
-      initials: 'JS',
-      earnAmount: '100',
-      balances: [
-        BalanceCardData(
-          flag: '🇸🇬',
-          amount: '15.00',
-          currency: 'Singapore Dollar',
-        ),
-        BalanceCardData(
-          flag: '🇦🇺',
-          amount: '0.00',
-          currency: 'Australian Dollar',
-        ),
-      ],
-      transactions: [
-        TransactionData(
-          icon: Icons.arrow_upward,
-          title: 'For your Wise card',
-          subtitle: 'Paid · Today',
-          amount: '9 SGD',
-        ),
-        TransactionData(
-          icon: Icons.add,
-          title: 'To your SGD balance',
-          subtitle: 'Added · Today',
-          amount: '24 SGD',
-        ),
-      ],
-    );
-  }
-
-  void refreshData() {
+  Future<void> getExchangeRate() async {
     state = state.copyWith(isLoading: true);
-    _initializeData();
+    
+    final result = await _exchangeRateRepository.getExchangeRate();
+    result.when(
+      success: (data) => state = state.copyWith(exchangeRates: data),
+      failure: (error) {
+        final errorMessage = NetworkExceptions.getErrorMessage(error);
+        return state = state.copyWith(error: errorMessage);
+      },
+    );
+    state = state.copyWith(isLoading: false);
   }
+
+ 
 }

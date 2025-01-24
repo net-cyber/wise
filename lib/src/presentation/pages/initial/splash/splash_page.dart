@@ -20,7 +20,6 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       () {
         ref.read(splashProvider.notifier).getUserStatus(
           context,
-          
         );
       },
       

@@ -6,6 +6,7 @@ import 'package:wise/src/presentation/pages/auth/register/register_page.dart';
 import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
 import 'package:wise/src/presentation/pages/main/card/card_page.dart';
 import 'package:wise/src/presentation/pages/main/home/home_page.dart';
+import 'package:wise/src/presentation/pages/main/send_money/send_money_page.dart';
 import 'package:wise/src/presentation/pages/main/setting/setting_page.dart';
 import 'package:wise/src/presentation/pages/main/shell_page.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/onboarding_page.dart';
@@ -83,7 +84,7 @@ final router = GoRouter(
             GoRoute(
               name: RouteName.send,
               path: '/${RouteName.send}',
-              builder: (context, state) => const Scaffold(), // Replace with SendPage
+              builder: (context, state) => SendMoneyPage(), 
             ),
           ],
         ),

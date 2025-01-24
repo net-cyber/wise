@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wise/src/model/exchage_rate_response.dart';
 
 class HomeState {
   final bool isLoading;
@@ -6,6 +7,8 @@ class HomeState {
   final String earnAmount;
   final List<BalanceCardData> balances;
   final List<TransactionData> transactions;
+  final List<ExchangeRateResponse> exchangeRates;
+  final String error;
 
   HomeState({
     this.isLoading = true,
@@ -13,6 +16,8 @@ class HomeState {
     this.earnAmount = '',
     this.balances = const [],
     this.transactions = const [],
+    this.exchangeRates = const [],
+    this.error = '',
   });
 
   HomeState copyWith({
@@ -21,6 +26,8 @@ class HomeState {
     String? earnAmount,
     List<BalanceCardData>? balances,
     List<TransactionData>? transactions,
+    List<ExchangeRateResponse>? exchangeRates,
+    String? error,
   }) {
     return HomeState(
       isLoading: isLoading ?? this.isLoading,
@@ -28,6 +35,8 @@ class HomeState {
       earnAmount: earnAmount ?? this.earnAmount,
       balances: balances ?? this.balances,
       transactions: transactions ?? this.transactions,
+      exchangeRates: exchangeRates ?? this.exchangeRates,
+      error: error ?? this.error,
     );
   }
 }

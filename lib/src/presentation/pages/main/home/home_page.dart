@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:wise/src/core/router/route_name.dart';
+import 'package:wise/src/model/exchage_rate_response.dart';
 import 'package:wise/src/presentation/pages/main/home/riverpod/provider/home_provider.dart';
 import 'package:wise/src/presentation/pages/main/home/riverpod/state/home_state.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/balance_card.dart';
@@ -10,10 +8,6 @@ import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/ba
 import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/transaction_shimmer.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/shimmer_container.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/transaction_item.dart';
-import 'package:wise/src/presentation/pages/main/home/widgets/filter_chip_button.dart';
-import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/filter_chips_shimmer.dart';
-import 'package:wise/src/presentation/pages/main/home/widgets/loading_widgets/top_bar_shimmer.dart';
-import 'package:wise/src/presentation/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomePage extends ConsumerWidget {
@@ -31,23 +25,16 @@ class HomePage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
-              
-             
-              state.isLoading 
+              state.isLoading
                 ? const ShimmerContainer(width: 150, height: 40)
                 : const Text(
                     'Account',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
               const SizedBox(height: 16),
-              
-              
-               SizedBox(height: 16.h),
-              
               state.isLoading 
                 ? const BalanceCardShimmer() 
-                : _buildBalanceCards(context, state.balances),
+                : _buildBalanceCards(context, state.exchangeRates),
                 
               const SizedBox(height: 24),
               
@@ -61,16 +48,18 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildBalanceCards(BuildContext context, List<BalanceCardData> balances) {
+  Widget _buildBalanceCards(BuildContext context, List<ExchangeRateResponse> exchangeRates) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: balances.map((balance) => Padding(
+        children: exchangeRates.map((exchangeRate) => Padding(
           padding: EdgeInsets.only(right: 16.w),
           child: BalanceCard(
-            flag: balance.flag,
-            amount: balance.amount,
-            currency: balance.currency,
+            flag: exchangeRate.currencyCode,
+            amount: exchangeRate.rate.toString(),
+            currency: exchangeRate.currencyCode,
+            name: exchangeRate.name,
+            rate: exchangeRate.rate,
           ),
         )).toList(),
       ),
