@@ -1,16 +1,18 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wise/src/presentation/pages/main/send_money/riverpod/provider/send_money_provider.dart';
 
-class SendMoneyPage extends StatefulWidget {
+class SendMoneyPage extends ConsumerStatefulWidget {
   const SendMoneyPage({super.key});
 
   @override
-  State<SendMoneyPage> createState() => _SendMoneyPageState();
+  ConsumerState<SendMoneyPage> createState() => _SendMoneyPageState();
 }
 
-class _SendMoneyPageState extends State<SendMoneyPage> {
+class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
   final _emailController = TextEditingController();
   final _amountController = TextEditingController();
   bool _isProcessing = false;
@@ -22,24 +24,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
       body: CustomScrollView(
         slivers: [
           // App Bar
-          SliverAppBar(
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            elevation: 0,
-            pinned: true,
-            expandedHeight: 120,
-            flexibleSpace: FlexibleSpaceBar(
-              expandedTitleScale: 1.0,
-              titlePadding: EdgeInsets.only(left: 16.w, bottom: 16.h),
-              title: Text(
-                'Send Money',
-                style: GoogleFonts.inter(
-                  fontSize: 34.sp,
-                  fontWeight: FontWeight.w800,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-            ),
-          ),
+         const AppBar(),
 
           // Content
           SliverFillRemaining(
@@ -50,7 +35,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Current Balance Card
-                  _buildBalanceCard(context),
+                  _buildBalanceCard(context, ref),
                   SizedBox(height: 24.h),
 
                   // Amount Input Section
@@ -74,7 +59,8 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
     );
   }
 
-  Widget _buildBalanceCard(BuildContext context) {
+  Widget _buildBalanceCard(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(sendMoneyNotifierProvider);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.w),
@@ -100,12 +86,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
             children: [
               Row(
                 children: [
-                  CountryFlag.fromCountryCode(
-                    'US',
-                    height: 20.h,
-                    width: 30.w,
-                  
-                  ),
+                 
                   SizedBox(width: 8.w),
                   Text(
                     'Available Balance',
@@ -123,7 +104,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
-                  'USD Account',
+                  ' Account',
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
@@ -135,7 +116,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
           ),
           SizedBox(height: 12.h),
           Text(
-            '\$2,458.50',
+            state.user?.balance.toString() ?? 'Unknown',
             style: GoogleFonts.inter(
               fontSize: 32.sp,
               fontWeight: FontWeight.w800,
@@ -286,7 +267,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: _isProcessing ? null : () => _handleSendMoney(),
+        onPressed: _isProcessing ? null : () => null,
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -317,25 +298,40 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
     );
   }
 
-  void _handleSendMoney() {
-    setState(() => _isProcessing = true);
-    
-    final data = {
-      "to_user_email": _emailController.text,
-      "amount": double.tryParse(_amountController.text) ?? 0.0,
-    };
-    
-    // TODO: Implement API call
-    
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() => _isProcessing = false);
-    });
-  }
+
 
   @override
   void dispose() {
     _emailController.dispose();
     _amountController.dispose();
     super.dispose();
+  }
+}
+
+class AppBar extends StatelessWidget {
+  const AppBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      elevation: 0,
+      pinned: true,
+      expandedHeight: 120,
+      flexibleSpace: FlexibleSpaceBar(
+        expandedTitleScale: 1.0,
+        titlePadding: EdgeInsets.only(left: 16.w, bottom: 16.h),
+        title: Text(
+          'Send Money',
+          style: GoogleFonts.inter(
+            fontSize: 34.sp,
+            fontWeight: FontWeight.w800,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+      ),
+    );
   }
 }

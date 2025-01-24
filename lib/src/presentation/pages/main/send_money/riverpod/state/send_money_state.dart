@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:wise/src/model/exchage_rate_response.dart';
+import 'package:wise/src/model/user_model.dart';
 
 class SendMoneyState {
-  final bool isLoading;
+  final bool isLoadingUserDetails;
   final String error;
-
+  final UserModel? user;
   SendMoneyState({
-    this.isLoading = true,
+    this.isLoadingUserDetails = false,
     this.error = '',
+    this.user,
   });
 
   SendMoneyState copyWith({
-    bool? isLoading,
+    bool? isLoadingUserDetails,
     String? error,
+    UserModel? user,
   }) {
     return SendMoneyState(
-      isLoading: isLoading ?? this.isLoading,
+      isLoadingUserDetails: isLoadingUserDetails ?? this.isLoadingUserDetails,
       error: error ?? this.error,
+      user: user ?? this.user,
     );
   }
 }
