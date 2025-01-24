@@ -13,6 +13,44 @@ class RequiredValidator extends BaseValidator<String> {
   }
 }
 
+class MustBeNumberValidator extends BaseValidator<String> {
+  @override
+  String? validate(String value) {
+    
+    if (!RegExp(r'^\d+$').hasMatch(value)) {
+      return 'This field must be a number';
+    }
+    return null;
+  }
+}
+class MinValueValidator extends BaseValidator<String> {
+  final double minValue;
+
+  MinValueValidator(this.minValue);
+
+  @override
+  String? validate(String value) {
+    if (double.parse(value) < minValue) {
+      return 'Minimum value should be $minValue';
+    }
+    return null;
+  }
+}
+
+class MaxValueValidator extends BaseValidator<String> {
+  final double maxValue;
+
+  MaxValueValidator(this.maxValue);
+
+  @override
+  String? validate(String value) {
+    if (double.parse(value) > maxValue) {
+      return 'Maximum value should be $maxValue';
+    }
+    return null;
+  }
+}
+ 
 class EmailValidator extends BaseValidator<String> {
   @override
   String? validate(String value) {

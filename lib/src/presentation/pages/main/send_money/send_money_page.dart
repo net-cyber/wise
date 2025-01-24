@@ -13,9 +13,7 @@ class SendMoneyPage extends ConsumerStatefulWidget {
 }
 
 class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
-  final _emailController = TextEditingController();
-  final _amountController = TextEditingController();
-  bool _isProcessing = false;
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +37,11 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
                   SizedBox(height: 24.h),
 
                   // Amount Input Section
-                  _buildAmountInput(context),
+                  _buildAmountInput(context, ref  ),
                   SizedBox(height: 24.h),
 
                   // Recipient Section
-                  _buildRecipientSection(context),
+                  _buildRecipientSection(context, ref),
                   
                   const Spacer(),
 
@@ -128,7 +126,8 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
     );
   }
 
-  Widget _buildAmountInput(BuildContext context) {
+  Widget _buildAmountInput(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(sendMoneyNotifierProvider);
     return Container(
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
@@ -172,7 +171,9 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
           ),
           SizedBox(height: 12.h),
           TextField(
-            controller: _amountController,
+            
+            onChanged: ref.read(sendMoneyNotifierProvider.notifier).setAmount,
+            controller: ref.read(sendMoneyNotifierProvider.notifier).amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             style: GoogleFonts.inter(
               fontSize: 40.sp,
@@ -180,6 +181,7 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
               color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
             decoration: InputDecoration(
+              errorText: state.validationErrors?['amount'],
               prefixText: '\$ ',
               prefixStyle: GoogleFonts.inter(
                 fontSize: 40.sp,
@@ -191,6 +193,7 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
               hintStyle: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.5),
               ),
+            
             ),
           ),
         ],
@@ -198,7 +201,7 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
     );
   }
 
-  Widget _buildRecipientSection(BuildContext context) {
+  Widget _buildRecipientSection(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -227,26 +230,26 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
             ],
           ),
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-          child: TextField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: 'Enter recipient email',
-              hintStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              prefixIcon: Icon(
-                Icons.email_outlined,
-                color: Theme.of(context).colorScheme.primary,
-                size: 20.sp,
-              ),
-            ),
-          ),
+          // child: TextField(
+          //   controller: _emailController,
+          //   keyboardType: TextInputType.emailAddress,
+          //   style: TextStyle(
+          //     fontSize: 16.sp,
+          //     color: Theme.of(context).colorScheme.onSurface,
+          //   ),
+          //   decoration: InputDecoration(
+          //     border: InputBorder.none,
+          //     hintText: 'Enter recipient email',
+          //     hintStyle: TextStyle(
+          //       color: Theme.of(context).colorScheme.onSurfaceVariant,
+          //     ),
+          //     prefixIcon: Icon(
+          //       Icons.email_outlined,
+          //       color: Theme.of(context).colorScheme.primary,
+          //       size: 20.sp,
+          //     ),
+          //   ),
+          // ),
         ),
       ],
     );
@@ -267,16 +270,16 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: _isProcessing ? null : () => null,
+        onPressed: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? () => null : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.primary.withOpacity(0.5),
+          foregroundColor: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onPrimary.withOpacity(0.5),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28.r),
           ),
         ),
-        child: _isProcessing
+        child: ref.read(sendMoneyNotifierProvider.notifier).isFormValid
             ? SizedBox(
                 height: 20.h,
                 width: 20.w,
@@ -298,14 +301,6 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
     );
   }
 
-
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _amountController.dispose();
-    super.dispose();
-  }
 }
 
 class AppBar extends StatelessWidget {
