@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:wise/src/core/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:wise/src/core/presentation/widgets/loading.dart';
 import 'package:wise/src/presentation/pages/main/send_money/riverpod/provider/send_money_provider.dart';
 
 class SendMoneyPage extends ConsumerStatefulWidget {
@@ -17,9 +19,10 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(sendMoneyNotifierProvider);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: CustomScrollView(
+      body: state.isTransactionLoading || state.isLoadingUserDetails ? const LoadingWidget() : CustomScrollView(
         slivers: [
           // App Bar
          const AppBar(),
@@ -113,6 +116,7 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
             ],
           ),
           SizedBox(height: 12.h),
+          
           Text(
             state.user?.balance.toString() ?? 'Unknown',
             style: GoogleFonts.inter(
@@ -181,7 +185,7 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
               color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
             decoration: InputDecoration(
-              errorText: state.validationErrors?['amount'],
+              errorText: state.isAmountInvalid ? state.validationErrors['amount'] : null,
               prefixText: '\$ ',
               prefixStyle: GoogleFonts.inter(
                 fontSize: 40.sp,
@@ -202,6 +206,7 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
   }
 
   Widget _buildRecipientSection(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(sendMoneyNotifierProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -214,43 +219,16 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
           ),
         ),
         SizedBox(height: 12.h),
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.03),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-          // child: TextField(
-          //   controller: _emailController,
-          //   keyboardType: TextInputType.emailAddress,
-          //   style: TextStyle(
-          //     fontSize: 16.sp,
-          //     color: Theme.of(context).colorScheme.onSurface,
-          //   ),
-          //   decoration: InputDecoration(
-          //     border: InputBorder.none,
-          //     hintText: 'Enter recipient email',
-          //     hintStyle: TextStyle(
-          //       color: Theme.of(context).colorScheme.onSurfaceVariant,
-          //     ),
-          //     prefixIcon: Icon(
-          //       Icons.email_outlined,
-          //       color: Theme.of(context).colorScheme.primary,
-          //       size: 20.sp,
-          //     ),
-          //   ),
-          // ),
-        ),
+         OutlinedBorderTextField(
+                    label: 'Your email',
+                    textController: ref.read(sendMoneyNotifierProvider.notifier).emailController,
+                    onChanged: ref.read(sendMoneyNotifierProvider.notifier).setEmail,
+                    inputType: TextInputType.emailAddress,
+                    textCapitalization: TextCapitalization.none,
+                    isError: state.isEmailNotValid,
+                    descriptionText: state.isEmailNotValid ? state.validationErrors['email'] : null,
+                    suffixIcon: const Icon(Icons.email),
+                  ),
       ],
     );
   }
@@ -270,7 +248,7 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? () => null : null,
+        onPressed: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? () => ref.read(sendMoneyNotifierProvider.notifier).sendMoney(context, ref) : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.primary.withOpacity(0.5),
           foregroundColor: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onPrimary.withOpacity(0.5),
@@ -280,23 +258,19 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
           ),
         ),
         child: ref.read(sendMoneyNotifierProvider.notifier).isFormValid
-            ? SizedBox(
-                height: 20.h,
-                width: 20.w,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-              )
-            : Text(
+            ? Text(
                 'Send Money',
                 style: GoogleFonts.inter(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
                 ),
-              ),
+              )
+            :  Text('Send Money', 
+            style: GoogleFonts.inter(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            )
       ),
     );
   }

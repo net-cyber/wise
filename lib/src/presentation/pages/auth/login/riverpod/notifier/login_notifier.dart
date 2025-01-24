@@ -104,7 +104,7 @@ class LoginNotifier extends StateNotifier<LoginState> with ValidationMixin {
         // clear text fields
         emailController.clear();
         passwordController.clear();
-        
+
         state = state.copyWith(isLoading: false);
         context.goNamed(RouteName.home);
       },

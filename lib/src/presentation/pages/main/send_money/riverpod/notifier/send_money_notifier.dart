@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wise/src/core/handlers/app_connectivity.dart';
@@ -6,19 +8,27 @@ import 'package:wise/src/core/utils/app_helpers.dart';
 import 'package:wise/src/core/validators/string_validators.dart';
 import 'package:wise/src/core/validators/validation_mixin.dart';
 import 'package:wise/src/core/validators/validation_pipe.dart';
+import 'package:wise/src/presentation/pages/main/send_money/riverpod/params/send_money_request_params.dart';
+import 'package:wise/src/presentation/pages/main/send_money/riverpod/provider/send_money_provider.dart';
 import 'package:wise/src/presentation/pages/main/send_money/riverpod/state/send_money_state.dart';
 import 'package:wise/src/repository/auth_repository.dart';
+import 'package:wise/src/repository/transaction_repository.dart';
 
 
 class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMixin {
-  final AuthRepository _authRepository;
+  final AuthRepository authRepository;
+  final TransactionRepository transactionRepository;
 
   final TextEditingController amountController = TextEditingController();
-
-  SendMoneyNotifier(this._authRepository) : super(SendMoneyState()) {
+  final TextEditingController emailController = TextEditingController();
+  SendMoneyNotifier({required this.authRepository, required this.transactionRepository}) : super(SendMoneyState()) {
     getUserDetails();
-       addValidationPipe('amount', ValidationPipe([
+        addValidationPipe('email', ValidationPipe([
+      RequiredValidator(),
+      EmailValidator(),
 
+    ]));
+       addValidationPipe('amount', ValidationPipe([
     ]));
   
   }
@@ -30,6 +40,17 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
       MinValueValidator(1),
       MaxValueValidator(state.user?.balance ?? 0),
     ]);
+  }
+   void setEmail(String value) {
+    final result = validateField('email', value);
+    log('==> email: $value');
+    if (!result.isValid && result.error != null) {
+      state = state.copyWith(email: value.trim(), isEmailNotValid: true, validationErrors: {
+        'email': result.error!,
+      });
+    } else {
+      state = state.copyWith(email: value.trim(), isEmailNotValid: false,);
+    }
   }
   
   void setAmount(String amount) {
@@ -58,7 +79,7 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
   Future<void> getUserDetails() async {
     state = state.copyWith(isLoadingUserDetails: true);
     
-    final result = await _authRepository.getUserDetails();
+    final result = await authRepository.getUserDetails();
     result.when(
       success: (data) => state = state.copyWith(user: data),
       failure: (error) {
@@ -69,25 +90,43 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
     state = state.copyWith(isLoadingUserDetails: false);
   }
 
-  // void sendMoney(BuildContext context) async {
-  //   if (!isFormValid) {
-  //     return;
-  //   }
-  //   // if there is no internet connection, show a snackbar
-  //   final connected = await AppConnectivity.connectivity();
-  //   if (!connected) {
-  //     AppHelpers.showNoConnectionSnackBar(context);
-  //     return;
-  //   }
-  //   final result = await _authRepository.sendMoney(state.amount);
-  //   result.when(
-  //     success: (data) => state = state.copyWith(user: data),
-  //     failure: (error) {
-  //       final errorMessage = NetworkExceptions.getErrorMessage(error);
-  //       return state = state.copyWith(error: errorMessage);
-  //     },
-  //   );
-  // }
- 
- 
+  void sendMoney(BuildContext context, WidgetRef ref) async {
+    if (!isFormValid) {
+      return;
+    }
+    // if there is no internet connection, show a snackbar
+    final connected = await AppConnectivity.connectivity();
+    if (!connected) {
+      AppHelpers.showNoConnectionSnackBar(context);
+      return;
+    }
+    state = state.copyWith(isTransactionLoading: true);
+    final result = await transactionRepository.sendMoney(SendMoneyRequestParams(amount: state.amount, email: state.email));
+    result.when(
+      success: (data) {
+        state = state.copyWith(transactionResponse: data);
+
+        emailController.clear();
+        amountController.clear();
+        // invalidate the provider
+        getUserDetails();
+        ref.invalidate(sendMoneyNotifierProvider);
+        state = state.copyWith(isTransactionLoading: false);
+
+        AppHelpers.showCheckFlash(context, 'Transfer successful');
+        
+        
+      },
+      failure: (error) {
+        final errorMessage = NetworkExceptions.getErrorMessage(error);
+        return state = state.copyWith(error: errorMessage);
+      },
+    );
+  }
+  @override
+  void dispose() {
+    amountController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
 }
