@@ -119,7 +119,11 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
       },
       failure: (error) {
         final errorMessage = NetworkExceptions.getErrorMessage(error);
+        AppHelpers.showErrorFlash(context, errorMessage);
+         ref.invalidate(sendMoneyNotifierProvider);
         return state = state.copyWith(error: errorMessage);
+
+        
       },
     );
   }

@@ -4,7 +4,6 @@ import 'package:wise/src/core/presentation/widgets/loading.dart';
 import 'package:wise/src/model/exchage_rate_response.dart';
 import 'package:wise/src/model/transaction_history_response.dart';
 import 'package:wise/src/presentation/pages/main/home/riverpod/provider/home_provider.dart';
-import 'package:wise/src/presentation/pages/main/home/riverpod/state/home_state.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/balance_card.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/shimmer_container.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/transaction_item.dart';

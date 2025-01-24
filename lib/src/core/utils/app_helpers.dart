@@ -1,80 +1,42 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wise/src/presentation/theme/app_colors.dart';
 
 class AppHelpers {
   AppHelpers._();
 
-
   static showNoConnectionSnackBar(BuildContext context) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    final snackBar = SnackBar(
+    Fluttertoast.showToast(
+      msg: 'No internet connection',
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
       backgroundColor: Colors.teal,
-      behavior: SnackBarBehavior.floating,
-      duration: const Duration(seconds: 3),
-      content: Text(
-        'No internet connection',
-        style: GoogleFonts.k2d(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.onPrimary,
-        ),
-      ),
-      action: SnackBarAction(
-        label: 'Close',
-        disabledTextColor: Colors.white,
-        textColor: Colors.yellow,
-        onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        },
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-    static showCheckFlash(BuildContext context, String text) {
-    return showFlash(
-      context: context,
-      duration: const Duration(seconds: 3),
-      builder: (BuildContext context, FlashController controller) {
-        return Flash(
-          controller: controller,
-          // backgroundColor: AppColors.mainBack,
-          position: FlashPosition.top,
-          // borderRadius: BorderRadius.circular(8.r),
-          // behavior: FlashBehavior.floating,
-          // margin: REdgeInsets.all(15),
-          // brightness: Brightness.light,
-          // barrierBlur: 1.5.r,
-          // barrierColor: Colors.black38,
-          // barrierDismissible: true,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 2.r,
-              ),
-            ),
-            child: Padding(
-              padding: REdgeInsets.all(15),
-              child: Text(
-                text,
-                style: GoogleFonts.k2d(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: -0.4,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        );
-      },
+      textColor: Colors.white,
+      fontSize: 14.0,
     );
   }
 
+  static showCheckFlash(BuildContext context, String text) {
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      textColor: Theme.of(context).colorScheme.onPrimary,
+      fontSize: 13.0,
+    );
+  }
+
+  static showErrorFlash(BuildContext context, String text) {
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
+      backgroundColor: Theme.of(context).colorScheme.error,
+      textColor: Theme.of(context).colorScheme.onError,
+      fontSize: 13.0,
+    );
+  }
 }
