@@ -55,12 +55,12 @@ class ShellPage extends StatelessWidget {
             label: 'Send',
           ),
           NavigationDestination(
-            icon: Icon(Icons.people_outline),
+            icon: Icon(Icons.currency_exchange_outlined),
             selectedIcon: Icon(
-              Icons.people,
+              Icons.currency_exchange,
               weight: 700,
             ),
-            label: 'Recipients',
+            label: 'Converter',
           ),
           NavigationDestination(
             icon: Icon(Icons.grid_view_outlined),
@@ -68,7 +68,7 @@ class ShellPage extends StatelessWidget {
               Icons.grid_view,
               weight: 700,
             ),
-            label: 'Manage',
+            label: 'Settings',
           ),
         ],
       ),

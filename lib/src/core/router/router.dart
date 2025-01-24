@@ -5,6 +5,7 @@ import 'package:wise/src/presentation/pages/auth/login/login_page.dart';
 import 'package:wise/src/presentation/pages/auth/register/register_page.dart';
 import 'package:wise/src/presentation/pages/initial/splash/splash_page.dart';
 import 'package:wise/src/presentation/pages/main/card/card_page.dart';
+import 'package:wise/src/presentation/pages/main/convert_currency/convert_currency.dart';
 import 'package:wise/src/presentation/pages/main/home/home_page.dart';
 import 'package:wise/src/presentation/pages/main/send_money/send_money_page.dart';
 import 'package:wise/src/presentation/pages/main/setting/setting_page.dart';
@@ -92,9 +93,9 @@ final router = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              name: RouteName.recipients,
-              path: '/${RouteName.recipients}',
-              builder: (context, state) => const Scaffold(), // Replace with RecipientsPage
+              name: RouteName.convert,
+              path: '/${RouteName.convert}',
+              builder: (context, state) => const ConvertCurrencyPage(), // Replace with RecipientsPage
             ),
           ],
         ),

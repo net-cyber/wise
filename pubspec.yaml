@@ -26,6 +26,7 @@ dependencies:
   flash: ^3.1.1
   rive: ^0.13.20
   country_flags: ^3.2.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

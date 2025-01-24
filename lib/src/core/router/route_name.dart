@@ -6,7 +6,7 @@ class RouteName {
   static const home = 'home';
   static const card = 'card';
   static const send = 'send';
-  static const recipients = 'recipients';
+  static const convert = 'convert';
   static const manage = 'manage';
   static const login = 'login';
   static const register = 'register';

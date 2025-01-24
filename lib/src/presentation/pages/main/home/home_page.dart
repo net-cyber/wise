@@ -103,8 +103,10 @@ class HomePage extends ConsumerWidget {
             title: transaction.counterparty,
             subtitle: transaction.type,
             amount: transaction.amount.toString(),
+            status: transaction.status,
+            timestamp: transaction.timestamp,
           ),
-        )).toList(),
+        )),
       ],
     );
   }

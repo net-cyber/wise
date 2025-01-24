@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wise/src/presentation/theme/app_colors.dart';
+import 'package:intl/intl.dart';
 
 class TransactionItem extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final String amount;
+  final String status;
+  final String timestamp;
 
   const TransactionItem({
     super.key,
@@ -14,6 +17,8 @@ class TransactionItem extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.amount,
+    required this.status,
+    required this.timestamp,
   });
 
   @override
@@ -60,15 +65,29 @@ class TransactionItem extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                  SizedBox(height: 6.h),
+                 
                 ],
               ),
             ),
-            Text(
-              amount,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18.sp,
-              ),
+            Column(
+              children: [
+                Text(
+                  amount,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.sp,
+                  ),
+                ),
+                SizedBox(height: 6.h),
+                 Text(
+                   DateFormat('dd/MM/yyyy').format(DateTime.parse(timestamp)),
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+              ],
             ),
           ],
         ),
