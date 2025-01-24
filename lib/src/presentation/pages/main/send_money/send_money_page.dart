@@ -234,6 +234,8 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
   }
 
   Widget _buildSendButton(BuildContext context) {
+    final state = ref.watch(sendMoneyNotifierProvider);
+    final isFormValid = ref.watch(sendMoneyNotifierProvider.notifier).isFormValid;
     return Container(
       width: double.infinity,
       height: 56.h,
@@ -248,29 +250,23 @@ class _SendMoneyPageState extends ConsumerState<SendMoneyPage> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? () => ref.read(sendMoneyNotifierProvider.notifier).sendMoney(context, ref) : null,
+        onPressed: isFormValid ? () => ref.read(sendMoneyNotifierProvider.notifier).sendMoney(context, ref) : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.primary.withOpacity(0.5),
-          foregroundColor: ref.read(sendMoneyNotifierProvider.notifier).isFormValid ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onPrimary.withOpacity(0.5),
+            backgroundColor: isFormValid ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.primary.withOpacity(0.5),
+            foregroundColor: isFormValid ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onPrimary.withOpacity(0.5),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(28.r),
           ),
         ),
-        child: ref.read(sendMoneyNotifierProvider.notifier).isFormValid
-            ? Text(
+        child:Text(
                 'Send Money',
                 style: GoogleFonts.inter(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
                 ),
               )
-            :  Text('Send Money', 
-            style: GoogleFonts.inter(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-            ),
-            )
+           
       ),
     );
   }

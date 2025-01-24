@@ -73,7 +73,7 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
   }
 
   bool get isFormValid {
-    return state.amount.isNotEmpty && !state.isAmountInvalid;
+    return state.amount.isNotEmpty && !state.isAmountInvalid && state.email.isNotEmpty && !state.isEmailNotValid;
   }
 
   Future<void> getUserDetails() async {
