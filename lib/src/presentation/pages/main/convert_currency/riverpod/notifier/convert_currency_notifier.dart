@@ -31,7 +31,11 @@ class ConvertCurrencyNotifier extends StateNotifier<ConvertCurrencyState> with V
     ]));
   }
 
-     void setAmount(String value) {
+  bool get isFormValid {
+    return state.amount.isNotEmpty ;
+  }
+
+  void setAmount(String value) {
     final result = validateField('amount', value);
     log('==> amount: $value');
     if (!result.isValid && result.error != null) {

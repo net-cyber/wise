@@ -106,7 +106,7 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
                     ],
                   ),
                   15.verticalSpace,
-                  Container(
+                 state.currencyConversion != null ? Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 50.h,
                     padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
@@ -114,24 +114,25 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text(state.currencyConversion?.convertedAmount.toString() ?? '',
+                    child: Text(state.currencyConversion?.convertedAmount.toStringAsFixed(2) ?? '',
                     style: TextStyle(
                       fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     ),
-                  ),
-                  25.verticalSpace,
+                  ) : const SizedBox.shrink(),
+                  50.verticalSpace,
                   ElevatedButton(
-                    onPressed: () {
-                      // Handle conversion
-                      amountNotifier.convertCurrency(
-                        fromCurrency: state.fromCurrency,
-                        toCurrency: state.toCurrency,
-                      );
-                    },
+                    onPressed: amountNotifier.isFormValid
+                        ? () {
+                            amountNotifier.convertCurrency(
+                              fromCurrency: state.fromCurrency,
+                          toCurrency: state.toCurrency,
+                        );
+                    
+                    } : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF9DE1A7),
+                      backgroundColor: amountNotifier.isFormValid ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
                       minimumSize: const Size(double.infinity, 56),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(28),
