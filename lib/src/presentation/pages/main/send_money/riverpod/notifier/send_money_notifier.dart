@@ -23,7 +23,7 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
   final TextEditingController emailController = TextEditingController();
   SendMoneyNotifier({required this.authRepository, required this.transactionRepository}) : super(SendMoneyState()) {
     getUserDetails();
-        addValidationPipe('email', ValidationPipe([
+    addValidationPipe('email', ValidationPipe([
       RequiredValidator(),
       EmailValidator(),
 

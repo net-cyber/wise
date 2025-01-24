@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wise/src/core/presentation/widgets/loading.dart';
 import 'package:wise/src/model/exchage_rate_response.dart';
 import 'package:wise/src/presentation/pages/main/convert_currency/riverpod/provider/convert_currency_provider.dart';
-import 'package:wise/src/presentation/pages/main/home/home_page.dart';
 
 class ConvertCurrencyPage extends ConsumerStatefulWidget {
   const ConvertCurrencyPage({super.key});
@@ -54,20 +53,32 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
                     ),
                   ),
                   5.verticalSpace,
-                 _buildCurrencyInput(
-                    controller: amountNotifier.amountController,
-                    currencyCode: state.fromCurrency.isNotEmpty 
-                      ? state.fromCurrency 
-                      : state.exchangeRates.first.currencyCode,
-                    flag: (state.fromCurrency.isNotEmpty 
-                      ? state.fromCurrency 
-                      : state.exchangeRates.first.currencyCode).substring(0, 2),
-                    showDropdown: true,
-                    exchangeRates: state.exchangeRates,
-                    isFromCurrency: true,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Amount',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _buildCurrencyInput(
+                        controller: amountNotifier.amountController,
+                        amount: '',
+                        currencyCode: state.fromCurrency.isNotEmpty 
+                          ? state.fromCurrency 
+                          : state.exchangeRates.first.currencyCode,
+                        flag: (state.fromCurrency.isNotEmpty 
+                          ? state.fromCurrency 
+                          : state.exchangeRates.first.currencyCode).substring(0, 2),
+                        exchangeRates: state.exchangeRates,
+                        isFromCurrency: true,
+                      ),
+                    ],
                   ),
                   25.verticalSpace,
-                 
                   const SizedBox(height: 24),
                   const Text(
                     'To',
@@ -77,24 +88,47 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
                     ),
                   ),
                   5.verticalSpace,
-                  _buildCurrencyInput(
-                    controller: amountNotifier.amountController,
-                    currencyCode: state.toCurrency.isNotEmpty 
-                      ? state.toCurrency 
-                      : state.exchangeRates.first.currencyCode,
-                    flag: (state.toCurrency.isNotEmpty 
-                      ? state.toCurrency 
-                      : state.exchangeRates.first.currencyCode).substring(0, 2),
-                    showDropdown: true,
-                    exchangeRates: state.exchangeRates,
-                    isFromCurrency: false,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildCurrencyInput(
+                        controller: amountNotifier.amountController,
+                        amount: '',
+                        currencyCode: state.toCurrency.isNotEmpty 
+                          ? state.toCurrency 
+                          : state.exchangeRates.first.currencyCode,
+                        flag: (state.toCurrency.isNotEmpty 
+                          ? state.toCurrency 
+                          : state.exchangeRates.first.currencyCode).substring(0, 2),
+                        exchangeRates: state.exchangeRates,
+                        isFromCurrency: false,
+                      ),
+                    ],
                   ),
-                  25.verticalSpace,
-                  // _buildAutoConvertSection(),
+                  15.verticalSpace,
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: 50.h,
+                    padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(state.currencyConversion?.convertedAmount.toString() ?? '',
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    ),
+                  ),
                   25.verticalSpace,
                   ElevatedButton(
                     onPressed: () {
                       // Handle conversion
+                      amountNotifier.convertCurrency(
+                        fromCurrency: state.fromCurrency,
+                        toCurrency: state.toCurrency,
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF9DE1A7),
@@ -122,21 +156,23 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
 
   Widget _buildCurrencyInput({
     required TextEditingController controller,
+    required String amount,
     required String currencyCode,
     required String flag,
-    bool showDropdown = false,
     required List<ExchangeRateResponse> exchangeRates,
     required bool isFromCurrency,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          Expanded(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Amount Input Field - Only show for "From" currency
+        if (isFromCurrency)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: TextField(
               controller: controller,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -149,35 +185,49 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
               ],
+              onChanged: (value) {
+                final amountNotifier = ref.read(convertCurrencyProvider.notifier);
+                amountNotifier.setAmount(value);
+              },
             ),
           ),
-          GestureDetector(
-            onTap: showDropdown ? () async {
-              final selectedCurrency = await _showCurrencyPicker(context, exchangeRates);
-              if (selectedCurrency != null) {
-                final amountNotifier = ref.read(convertCurrencyProvider.notifier);
-                // Update the selected currency in your state
-                // You'll need to add a method in your notifier to handle this
-                amountNotifier.updateSelectedCurrency(selectedCurrency, isFromCurrency);
-              }
-            } : null,
+        
+        if (isFromCurrency) const SizedBox(height: 12),
+        
+        // Currency Dropdown
+        GestureDetector(
+          onTap: () async {
+            final selectedCurrency = await _showCurrencyPicker(context, exchangeRates);
+            if (selectedCurrency != null) {
+              final amountNotifier = ref.read(convertCurrencyProvider.notifier);
+              amountNotifier.updateSelectedCurrency(selectedCurrency, isFromCurrency);
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(flag),
-                const SizedBox(width: 8),
-                Text(
-                  currencyCode,
-                  style: const TextStyle(fontSize: 18),
+                Row(
+                  children: [
+                    Text(flag),
+                    const SizedBox(width: 8),
+                    Text(
+                      currencyCode,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
                 ),
-                if (showDropdown) ...[
-                  const SizedBox(width: 4),
-                  const Icon(Icons.keyboard_arrow_down),
-                ],
+                const Icon(Icons.keyboard_arrow_down),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:wise/src/core/constants/app_constants.dart';
 import 'package:wise/src/core/di/injection.dart';
@@ -35,10 +37,11 @@ class ExchangeRateRepositoryImpl extends ExchangeRateRepository {
   Future<ApiResult<CurrencyConversionResponse>> convertCurrency(ConvertCurrencyRequestParams request) async {
     try {
       final data = {
-        'from': request.fromCurrency,
-        'to': request.toCurrency,
-        'amount': request.amount,
+        'from_currency': request.fromCurrency,
+        'to_currency': request.toCurrency,
+        'amount': double.parse(request.amount.trim()),
       };
+      log('convert currency in ${data}');
       final client = inject<HttpService>().client(requireAuth: true);
       final response = await client.post('${AppConstants.baseUrl}/convert', data: data);
       if (response.statusCode == 200) {

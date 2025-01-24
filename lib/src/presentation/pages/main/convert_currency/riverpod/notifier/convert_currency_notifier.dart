@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wise/src/core/handlers/network_exceptions.dart';
+import 'package:wise/src/core/validators/string_validators.dart';
 import 'package:wise/src/core/validators/validation_mixin.dart';
 import 'package:wise/src/core/validators/validation_pipe.dart';
 import 'package:wise/src/model/exchage_rate_response.dart';
@@ -15,8 +16,17 @@ class ConvertCurrencyNotifier extends StateNotifier<ConvertCurrencyState> with V
   final ExchangeRateRepository _exchangeRateRepository;
   final TextEditingController amountController = TextEditingController();
   ConvertCurrencyNotifier(this._exchangeRateRepository,) : super(ConvertCurrencyState()) {
-    getExchangeRate();
-     addValidationPipe('amount', ValidationPipe([
+    getExchangeRate().then((_) {
+      if (state.exchangeRates.isNotEmpty) {
+        // Set default values for fromCurrency and toCurrency
+        state = state.copyWith(
+          fromCurrency: state.exchangeRates[0].currencyCode,
+          toCurrency: state.exchangeRates.length > 1 ? state.exchangeRates[1].currencyCode : state.exchangeRates[0].currencyCode,
+        );
+      }
+    });
+    addValidationPipe('amount', ValidationPipe([
+      RequiredValidator(),
     ]));
   }
 
@@ -49,14 +59,17 @@ class ConvertCurrencyNotifier extends StateNotifier<ConvertCurrencyState> with V
     final request = ConvertCurrencyRequestParams(
       fromCurrency: fromCurrency,
       toCurrency: toCurrency,
-      amount: amountController.text,
+      amount: amountController.text.trim(),
     );
     final result = await _exchangeRateRepository.convertCurrency(request);
     result.when(
-      success: (data) => state = state.copyWith(currencyConversion: data),
+      success: (data) {
+        state = state.copyWith(currencyConversion: data, isConvertingCurrency: false);
+        log('==> currencyConversion: ${data.convertedAmount}');
+      },
       failure: (error) {
         final errorMessage = NetworkExceptions.getErrorMessage(error);
-        return state = state.copyWith(error: errorMessage);
+        return state = state.copyWith(error: errorMessage, isConvertingCurrency: false);
       },
     );
     state = state.copyWith(isConvertingCurrency: false);
@@ -69,4 +82,5 @@ class ConvertCurrencyNotifier extends StateNotifier<ConvertCurrencyState> with V
       state = state.copyWith(toCurrency: currency.currencyCode);
     }
   }
+
 }

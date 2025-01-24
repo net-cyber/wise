@@ -13,7 +13,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
   Future<ApiResult<TransactionResponse>> sendMoney(SendMoneyRequestParams request) async {
      try {
       final data = {
-        'amount': double.parse(request.amount),
+        'amount': double.parse(request.amount.trim()),
         'to_user_email': request.email,
       };
       final client = inject<HttpService>().client(requireAuth: true);
@@ -39,21 +39,5 @@ class TransactionRepositoryImpl extends TransactionRepository {
     }
   }
 
-  @override
-  Future<ApiResult<TransactionResponse>> convertCurrency(ConvertCurrencyRequestParams request) async {
-    try {
-      final data = {
-        'from_currency': request.fromCurrency,
-        'to_currency': request.toCurrency,
-        'amount': double.parse(request.amount),
-      };
-      final client = inject<HttpService>().client(requireAuth: true);
-      final response = await client.post('${AppConstants.baseUrl}/convert', data: data);
-      final transactionResponse = TransactionResponse.fromJson(response.data);
-      return ApiResult.success(data: transactionResponse);
-    } catch (e) {
-      debugPrint('==> convert currency failure: $e');
-      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
-    }
-  }
+
 }
