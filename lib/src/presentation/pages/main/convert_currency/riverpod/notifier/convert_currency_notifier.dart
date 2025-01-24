@@ -27,6 +27,7 @@ class ConvertCurrencyNotifier extends StateNotifier<ConvertCurrencyState> with V
     });
     addValidationPipe('amount', ValidationPipe([
       RequiredValidator(),
+      NumberValidator(),
     ]));
   }
 

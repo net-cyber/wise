@@ -162,10 +162,16 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
     required List<ExchangeRateResponse> exchangeRates,
     required bool isFromCurrency,
   }) {
+    // Helper function to get flag emoji
+    String getFlagEmoji(String countryCode) {
+      final int firstLetter = countryCode.codeUnitAt(0) - 0x41 + 0x1F1E6;
+      final int secondLetter = countryCode.codeUnitAt(1) - 0x41 + 0x1F1E6;
+      return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Amount Input Field - Only show for "From" currency
         if (isFromCurrency)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -194,7 +200,6 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
         
         if (isFromCurrency) const SizedBox(height: 12),
         
-        // Currency Dropdown
         GestureDetector(
           onTap: () async {
             final selectedCurrency = await _showCurrencyPicker(context, exchangeRates);
@@ -214,7 +219,10 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
               children: [
                 Row(
                   children: [
-                    Text(flag),
+                    Text(
+                      getFlagEmoji(flag),
+                      style: const TextStyle(fontSize: 24),
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       currencyCode,
@@ -233,6 +241,12 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
 
  
   Future<ExchangeRateResponse?> _showCurrencyPicker(BuildContext context, List<ExchangeRateResponse> exchangeRates) {
+    String getFlagEmoji(String countryCode) {
+      final int firstLetter = countryCode.codeUnitAt(0) - 0x41 + 0x1F1E6;
+      final int secondLetter = countryCode.codeUnitAt(1) - 0x41 + 0x1F1E6;
+      return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
+    }
+
     return showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -260,13 +274,12 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
                     final currency = exchangeRates[index];
                     return ListTile(
                       leading: Text(
-                        currency.currencyCode.substring(0, 2),
+                        getFlagEmoji(currency.currencyCode.substring(0, 2)),
                         style: const TextStyle(fontSize: 24),
                       ),
                       title: Text(currency.currencyCode),
                       subtitle: Text(currency.name),
                       onTap: () {
-                        // Handle currency selection
                         Navigator.pop(context, currency);
                       },
                     );

@@ -50,6 +50,16 @@ class MaxValueValidator extends BaseValidator<String> {
     return null;
   }
 }
+
+class NumberValidator extends BaseValidator<String> {
+  @override
+  String? validate(String value) {
+    if (!RegExp(r'^\d+$').hasMatch(value)) {
+      return 'This field must be a number';
+    }
+    return null;
+  }
+}
  
 class EmailValidator extends BaseValidator<String> {
   @override
