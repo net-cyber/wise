@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wise/src/model/exchage_rate_response.dart';
+import 'package:wise/src/model/transaction_history_response.dart';
 
 class HomeState {
   final bool isLoading;
@@ -8,6 +9,7 @@ class HomeState {
   final List<BalanceCardData> balances;
   final List<TransactionData> transactions;
   final List<ExchangeRateResponse> exchangeRates;
+  final TransactionHistoryResponse? transactionHistory;
   final String error;
 
   HomeState({
@@ -17,6 +19,7 @@ class HomeState {
     this.balances = const [],
     this.transactions = const [],
     this.exchangeRates = const [],
+    this.transactionHistory,
     this.error = '',
   });
 
@@ -27,6 +30,7 @@ class HomeState {
     List<BalanceCardData>? balances,
     List<TransactionData>? transactions,
     List<ExchangeRateResponse>? exchangeRates,
+    TransactionHistoryResponse? transactionHistory,
     String? error,
   }) {
     return HomeState(
@@ -36,6 +40,7 @@ class HomeState {
       balances: balances ?? this.balances,
       transactions: transactions ?? this.transactions,
       exchangeRates: exchangeRates ?? this.exchangeRates,
+      transactionHistory: transactionHistory ?? this.transactionHistory,
       error: error ?? this.error,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wise/src/model/exchage_rate_response.dart';
+import 'package:wise/src/model/transaction_history_response.dart';
 import 'package:wise/src/presentation/pages/main/home/riverpod/provider/home_provider.dart';
 import 'package:wise/src/presentation/pages/main/home/riverpod/state/home_state.dart';
 import 'package:wise/src/presentation/pages/main/home/widgets/balance_card.dart';
@@ -21,27 +22,29 @@ class HomePage extends ConsumerWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              state.isLoading
-                ? const ShimmerContainer(width: 150, height: 40)
-                : const Text(
-                    'Account',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-              const SizedBox(height: 16),
-              state.isLoading 
-                ? const BalanceCardShimmer() 
-                : _buildBalanceCards(context, state.exchangeRates),
+          padding: EdgeInsets.all(16.0.w),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                state.isLoading
+                  ? const ShimmerContainer(width: 150, height: 40)
+                  : const Text(
+                      'Account',
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    ),
+                const SizedBox(height: 16),
+                state.isLoading 
+                  ? const BalanceCardShimmer() 
+                  : _buildBalanceCards(context, state.exchangeRates),
+                  
+                const SizedBox(height: 24),
                 
-              const SizedBox(height: 24),
-              
-              state.isLoading
-                ? const TransactionShimmer()
-                : _buildTransactions(context, state.transactions),
-            ],
+                state.isLoading
+                  ? const TransactionShimmer()
+                  : _buildTransactions(context, state.transactionHistory?.transactions ?? []),
+              ],
+            ),
           ),
         ),
       ),
@@ -66,7 +69,7 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildTransactions(BuildContext context, List<TransactionData> transactions) {
+  Widget _buildTransactions(BuildContext context, List<TransactionList> transactions) {
     return Column(
       children: [
         Row(
@@ -96,10 +99,10 @@ class HomePage extends ConsumerWidget {
         ...transactions.map((transaction) => Padding(
           padding: EdgeInsets.only(bottom: 16.h),
           child: TransactionItem(
-            icon: transaction.icon,
-            title: transaction.title,
-            subtitle: transaction.subtitle,
-            amount: transaction.amount,
+            icon: Icons.arrow_forward_ios,
+            title: transaction.counterparty,
+            subtitle: transaction.type,
+            amount: transaction.amount.toString(),
           ),
         )).toList(),
       ],
