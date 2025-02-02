@@ -25,23 +25,29 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1200),
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
+    _fadeAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0.0, end: 1.0),
+        weight: 70,
+      ),
+      TweenSequenceItem(
+        tween: ConstantTween<double>(1.0),
+        weight: 30,
+      ),
+    ]).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOut,
+      curve: Curves.easeOutCubic,
     ));
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.1),
+      begin: const Offset(0, 0.15),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.easeOut,
+      curve: Curves.easeOutCubic,
     ));
 
     _controller.forward();
@@ -61,15 +67,19 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: state.isLoading 
             ? const LoadingWidget() 
             : RefreshIndicator(
+                color: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).cardColor,
                 onRefresh: () async {
                   await ref.read(homeNotifierProvider.notifier).refreshData();
                 },
                 child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
+                  physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics(),
+                  ),
                   slivers: [
                     SliverToBoxAdapter(
                       child: FadeTransition(
@@ -79,12 +89,11 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              30.verticalSpace,
-                              30.verticalSpace,
-                              _buildTotalBalance(context, state.exchangeRates),
+                              40.verticalSpace,
+                              _buildHeader(context),
                               30.verticalSpace,
                               _buildQuickActions(context),
-                              30.verticalSpace,
+                              35.verticalSpace,
                               _buildBalanceCards(context, state.exchangeRates),
                               40.verticalSpace,
                             ],
@@ -101,133 +110,96 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     );
   }
 
-  Widget _buildTotalBalance(BuildContext context, List<ExchangeRateResponse> rates) {
-    final totalBalance = rates.fold(0.0, (sum, rate) => sum + rate.rate);
-    
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 28.h),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.secondary,
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -20,
-            top: -20,
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                shape: BoxShape.circle,
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome back',
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.6),
               ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total Balance',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.trending_up,
-                          color: Colors.white,
-                          size: 16.sp,
-                        ),
-                        4.horizontalSpace,
-                        Text(
-                          '+2.4%',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              12.verticalSpace,
-              Text(
-                '\$${totalBalance.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: 36.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  height: 1,
-                ),
+            6.verticalSpace,
+            
+          ],
+        ),
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-        ],
-      ),
+          child: CircleAvatar(
+            radius: 24.r,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            child: Icon(
+              Icons.person_outline_rounded,
+              color: Colors.white,
+              size: 24.sp,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildQuickActions(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildActionButton(
-          context,
-          icon: Icons.swap_horiz_rounded,
-          label: 'Transfer',
-          color: Theme.of(context).colorScheme.primary,
-          onTap: () {},
-        ),
-        _buildActionButton(
-          context,
-          icon: Icons.add_rounded,
-          label: 'Top Up',
-          color: Colors.green,
-          onTap: () {},
-        ),
-        _buildActionButton(
-          context,
-          icon: Icons.payments_rounded,
-          label: 'Pay',
-          color: Colors.orange,
-          onTap: () {},
-        ),
-        _buildActionButton(
-          context,
-          icon: Icons.more_horiz_rounded,
-          label: 'More',
-          color: Colors.blue,
-          onTap: () {},
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(32),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildActionButton(
+            context,
+            icon: Icons.swap_horiz_rounded,
+            label: 'Transfer',
+            color: Theme.of(context).colorScheme.primary,
+            onTap: () {},
+          ),
+          _buildActionButton(
+            context,
+            icon: Icons.add_rounded,
+            label: 'Top Up',
+            color: Colors.green.shade600,
+            onTap: () {},
+          ),
+          _buildActionButton(
+            context,
+            icon: Icons.payments_rounded,
+            label: 'Pay',
+            color: Colors.orange.shade600,
+            onTap: () {},
+          ),
+          _buildActionButton(
+            context,
+            icon: Icons.more_horiz_rounded,
+            label: 'More',
+            color: Colors.blue.shade600,
+            onTap: () {},
+          ),
+        ],
+      ),
     );
   }
 
@@ -241,12 +213,17 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     return GestureDetector(
       onTap: onTap,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: EdgeInsets.all(12.w),
+            padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
               color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: color.withOpacity(0.15),
+                width: 1.5,
+              ),
             ),
             child: Icon(
               icon,
@@ -254,12 +231,13 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               size: 24.sp,
             ),
           ),
-          8.verticalSpace,
+          12.verticalSpace,
           Text(
             label,
             style: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w500,
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.8),
             ),
           ),
         ],
@@ -271,68 +249,79 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Your Accounts',
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Your Accounts',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.5,
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: Row(
-                children: [
-                  Text(
-                    'See all',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Theme.of(context).colorScheme.primary,
+              TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                  foregroundColor: Theme.of(context).colorScheme.primary,
+                ),
+                child: Row(
+                  children: [
+                    Text(
+                      'See all',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  4.horizontalSpace,
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 12.sp,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ],
+                    6.horizontalSpace,
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 12.sp,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        16.verticalSpace,
+        20.verticalSpace,
         SizedBox(
-          height: 140.h,
+          height: 160.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
             itemCount: exchangeRates.length,
             itemBuilder: (context, index) => Container(
               margin: EdgeInsets.only(right: 16.w),
-              width: 160.w,
-              padding: EdgeInsets.all(20.w),
+              width: 180.w,
+              padding: EdgeInsets.all(24.w),
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(32),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
+                    color: Colors.black.withOpacity(0.06),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
                 ],
+                border: Border.all(
+                  color: Theme.of(context).dividerColor.withOpacity(0.1),
+                  width: 1.5,
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(8.w),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -359,16 +348,18 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                       Text(
                         '\$${exchangeRates[index].rate.toStringAsFixed(2)}',
                         style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 26.sp,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.5,
                         ),
                       ),
-                      4.verticalSpace,
+                      6.verticalSpace,
                       Text(
                         'Available',
                         style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.grey[600],
+                          fontSize: 13.sp,
+                          color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.5),
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -423,80 +414,95 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
             );
           }
           final transaction = transactions[index - 1];
-          return Container(
-            margin: EdgeInsets.only(bottom: 16.h),
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
-                  blurRadius: 15,
-                  offset: const Offset(0, 5),
+          return AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              final delay = index * 0.1;
+              final opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(
+                  parent: _controller,
+                  curve: Interval(delay, delay + 0.5, curve: Curves.easeOut),
                 ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(12.w),
+              );
+              return FadeTransition(
+                opacity: opacity,
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 16.h),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.w),
                   decoration: BoxDecoration(
-                    color: _getTransactionColor(context, transaction.type).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(16),
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 20,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
                   ),
-                  child: Icon(
-                    _getTransactionIcon(transaction.type),
-                    color: _getTransactionColor(context, transaction.type),
-                    size: 24.sp,
-                  ),
-                ),
-                16.horizontalSpace,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Text(
-                        transaction.counterparty,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
+                      Container(
+                        padding: EdgeInsets.all(12.w),
+                        decoration: BoxDecoration(
+                          color: _getTransactionColor(context, transaction.type).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          _getTransactionIcon(transaction.type),
+                          color: _getTransactionColor(context, transaction.type),
+                          size: 24.sp,
                         ),
                       ),
-                      6.verticalSpace,
-                      Text(
-                        transaction.type,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey[600],
+                      16.horizontalSpace,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              transaction.counterparty,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            6.verticalSpace,
+                            Text(
+                              transaction.type,
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            _getAmountPrefix(transaction.type) + '\$${transaction.amount}',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: _getAmountColor(context, transaction.type),
+                            ),
+                          ),
+                          6.verticalSpace,
+                          Text(
+                            _formatDate(transaction.timestamp),
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      _getAmountPrefix(transaction.type) + '\$${transaction.amount}',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: _getAmountColor(context, transaction.type),
-                      ),
-                    ),
-                    6.verticalSpace,
-                    Text(
-                      _formatDate(transaction.timestamp),
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              );
+            },
           );
         },
         childCount: transactions.length + 1,
