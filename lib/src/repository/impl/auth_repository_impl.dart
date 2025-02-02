@@ -52,7 +52,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<ApiResult<UserModel>> getUserDetails() async {
+  Future<ApiResult<UserModel>> getUserDetails(BuildContext context) async {
     try {
       final client = inject<HttpService>().client(requireAuth: true);
       final response = await client.get('${AppConstants.baseUrl}/user');

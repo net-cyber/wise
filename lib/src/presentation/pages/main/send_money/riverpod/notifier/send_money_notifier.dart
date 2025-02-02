@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wise/src/core/handlers/app_connectivity.dart';
 import 'package:wise/src/core/handlers/network_exceptions.dart';
+import 'package:wise/src/core/navigation/navigation_service.dart';
 import 'package:wise/src/core/utils/app_helpers.dart';
 import 'package:wise/src/core/validators/string_validators.dart';
 import 'package:wise/src/core/validators/validation_mixin.dart';
@@ -22,7 +23,7 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
   final TextEditingController amountController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   SendMoneyNotifier({required this.authRepository, required this.transactionRepository}) : super(SendMoneyState()) {
-    getUserDetails();
+    getUserDetails(NavigationService.currentContext!);
     addValidationPipe('email', ValidationPipe([
       RequiredValidator(),
       EmailValidator(),
@@ -76,10 +77,10 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
     return state.amount.isNotEmpty && !state.isAmountInvalid && state.email.isNotEmpty && !state.isEmailNotValid;
   }
 
-  Future<void> getUserDetails() async {
+  Future<void> getUserDetails(BuildContext context) async {
     state = state.copyWith(isLoadingUserDetails: true);
     
-    final result = await authRepository.getUserDetails();
+    final result = await authRepository.getUserDetails(context);
     result.when(
       success: (data) => state = state.copyWith(user: data),
       failure: (error) {
@@ -109,7 +110,7 @@ class SendMoneyNotifier extends StateNotifier<SendMoneyState> with ValidationMix
         emailController.clear();
         amountController.clear();
         // invalidate the provider
-        getUserDetails();
+        getUserDetails(context);
         ref.invalidate(sendMoneyNotifierProvider);
         state = state.copyWith(isTransactionLoading: false);
 

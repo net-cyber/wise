@@ -12,8 +12,10 @@ import 'package:wise/src/presentation/pages/main/setting/setting_page.dart';
 import 'package:wise/src/presentation/pages/main/shell_page.dart';
 import 'package:wise/src/presentation/pages/initial/onboarding/onboarding_page.dart';
 import 'package:wise/src/presentation/pages/initial/drag_onboarding/drag_onboarding_page.dart';
+import 'package:wise/src/core/navigation/navigation_service.dart';
 
 final router = GoRouter(
+  navigatorKey: NavigationService.navigatorKey,
   initialLocation: '/${RouteName.splash}',
   routes: [
     // Splash
