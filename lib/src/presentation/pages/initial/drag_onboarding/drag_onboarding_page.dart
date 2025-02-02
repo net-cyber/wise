@@ -17,6 +17,7 @@ class DragOnboardingPage extends ConsumerStatefulWidget {
 class _DragOnboardingPageState extends ConsumerState<DragOnboardingPage> with SingleTickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
@@ -29,6 +30,14 @@ class _DragOnboardingPageState extends ConsumerState<DragOnboardingPage> with Si
     _fadeAnimation = Tween<double>(
       begin: 0.6,
       end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeInOut,
+    ));
+
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
     ).animate(CurvedAnimation(
       parent: _fadeController,
       curve: Curves.easeInOut,
@@ -59,6 +68,7 @@ class _DragOnboardingPageState extends ConsumerState<DragOnboardingPage> with Si
   @override
   Widget build(BuildContext context) {
     final dragPosition = ref.watch(dragSplashProvider);
+    final progress = (dragPosition / -200).clamp(0.0, 1.0);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -66,24 +76,33 @@ class _DragOnboardingPageState extends ConsumerState<DragOnboardingPage> with Si
         child: Stack(
           children: [
             Center(
-              child: Image.asset(
-                AppConstants.wiseLogo,
-                width: 120.w,
-                height: 120.h,
-                color: Theme.of(context).colorScheme.primary,
+              child: AnimatedBuilder(
+                animation: _scaleAnimation,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Image.asset(
+                      AppConstants.wiseLogo,
+                      width: 120.w,
+                      height: 120.h,
+                      color: Theme.of(context).colorScheme.primary
+                          .withOpacity(1 - (progress * 0.3)),
+                    ),
+                  );
+                },
               ),
             ),
             Positioned.fill(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  _buildDragIndicator(context, dragPosition),
+                  _buildDragIndicator(context, dragPosition, progress),
                   32.verticalSpace,
                   AnimatedBuilder(
                     animation: _fadeAnimation,
                     builder: (context, child) {
                       return Opacity(
-                        opacity: _fadeAnimation.value,
+                        opacity: _fadeAnimation.value * (1 - progress),
                         child: Text(
                           'Swipe up to begin',
                           style: TextStyle(
@@ -105,7 +124,7 @@ class _DragOnboardingPageState extends ConsumerState<DragOnboardingPage> with Si
     );
   }
 
-  Widget _buildDragIndicator(BuildContext context, double dragPosition) {
+  Widget _buildDragIndicator(BuildContext context, double dragPosition, double progress) {
     return GestureDetector(
       onVerticalDragUpdate: (details) => _handleDragUpdate(context, details),
       onVerticalDragEnd: _handleDragEnd,
@@ -116,7 +135,14 @@ class _DragOnboardingPageState extends ConsumerState<DragOnboardingPage> with Si
             width: 2.w,
             height: 100.h,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                  Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                ],
+              ),
               borderRadius: BorderRadius.circular(1.r),
             ),
           ),
@@ -130,17 +156,34 @@ class _DragOnboardingPageState extends ConsumerState<DragOnboardingPage> with Si
                   height: 40.h,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary.withOpacity(_fadeAnimation.value),
+                    color: Theme.of(context).colorScheme.primary
+                        .withOpacity(_fadeAnimation.value * (1 - progress * 0.3)),
                   ),
                   child: Icon(
                     Icons.keyboard_arrow_up_rounded,
-                    color: Colors.white,
+                    color: Colors.white.withOpacity(1 - progress),
                     size: 24.sp,
                   ),
                 );
               },
             ),
           ),
+          if (progress > 0)
+            Positioned(
+              top: 0,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: progress,
+                child: Container(
+                  width: 40.w,
+                  height: 2.h,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(1.r),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
