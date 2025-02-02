@@ -80,7 +80,6 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               30.verticalSpace,
-                              _buildHeader(context),
                               30.verticalSpace,
                               _buildTotalBalance(context, state.exchangeRates),
                               30.verticalSpace,
