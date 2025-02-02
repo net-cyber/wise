@@ -19,228 +19,208 @@ class _ConvertCurrencyPageState extends ConsumerState<ConvertCurrencyPage> {
   Widget build(BuildContext context) {
     final amountNotifier = ref.watch(convertCurrencyProvider.notifier);
     final state = ref.watch(convertCurrencyProvider);
+    
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child:state.isLoadingCurrency || state.isConvertingCurrency ?
-           const LoadingWidget():
-           SingleChildScrollView(
-            child:  Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: state.isLoadingCurrency || state.isConvertingCurrency
+          ? const LoadingWidget()
+          : Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'How much do you want\nto convert?',
+                  50.verticalSpace,
+                  Text(
+                    '💱 Currency Converter',
                     style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  25.verticalSpace,
-                  const Text(
-                    'Convert',
-                    style: TextStyle(
-                      fontSize: 16,
-                      
+                  30.verticalSpace,
+                  _buildCurrencyCard(
+                    isFrom: true,
+                    controller: amountNotifier.amountController,
+                    currencyCode: state.fromCurrency.isNotEmpty 
+                      ? state.fromCurrency 
+                      : state.exchangeRates.first.currencyCode,
+                    exchangeRates: state.exchangeRates,
+                  ),
+                  20.verticalSpace,
+                  Center(
+                    child: IconButton(
+                      onPressed: () {
+                        // Add currency swap functionality here
+                      },
+                      icon: const Icon(Icons.swap_vert_rounded, size: 32),
                     ),
                   ),
-                  25.verticalSpace,
-                  const Text(
-                    'From',
-                    style: TextStyle(
-                      fontSize: 16,
-                      
-                    ),
+                  20.verticalSpace,
+                  _buildCurrencyCard(
+                    isFrom: false,
+                    controller: amountNotifier.amountController,
+                    currencyCode: state.toCurrency.isNotEmpty 
+                      ? state.toCurrency 
+                      : state.exchangeRates.first.currencyCode,
+                    exchangeRates: state.exchangeRates,
                   ),
-                  5.verticalSpace,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Amount',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                  24.verticalSpace,
+                  if (state.currencyConversion != null)
+                    Container(
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${state.currencyConversion?.convertedAmount.toStringAsFixed(2)} ${state.toCurrency}',
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const Spacer(),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 24.h),
+                    child: ElevatedButton(
+                      onPressed: amountNotifier.isFormValid
+                          ? () => amountNotifier.convertCurrency(
+                              fromCurrency: state.fromCurrency,
+                              toCurrency: state.toCurrency,
+                            )
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        minimumSize: Size(double.infinity, 56.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      _buildCurrencyInput(
-                        controller: amountNotifier.amountController,
-                        amount: '',
-                        currencyCode: state.fromCurrency.isNotEmpty 
-                          ? state.fromCurrency 
-                          : state.exchangeRates.first.currencyCode,
-                        flag: (state.fromCurrency.isNotEmpty 
-                          ? state.fromCurrency 
-                          : state.exchangeRates.first.currencyCode).substring(0, 2),
-                        exchangeRates: state.exchangeRates,
-                        isFromCurrency: true,
-                      ),
-                    ],
-                  ),
-                  25.verticalSpace,
-                  const SizedBox(height: 24),
-                  const Text(
-                    'To',
-                    style: TextStyle(
-                      fontSize: 16,
-                    
-                    ),
-                  ),
-                  5.verticalSpace,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildCurrencyInput(
-                        controller: amountNotifier.amountController,
-                        amount: '',
-                        currencyCode: state.toCurrency.isNotEmpty 
-                          ? state.toCurrency 
-                          : state.exchangeRates.first.currencyCode,
-                        flag: (state.toCurrency.isNotEmpty 
-                          ? state.toCurrency 
-                          : state.exchangeRates.first.currencyCode).substring(0, 2),
-                        exchangeRates: state.exchangeRates,
-                        isFromCurrency: false,
-                      ),
-                    ],
-                  ),
-                  15.verticalSpace,
-                 state.currencyConversion != null ? Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 50.h,
-                    padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 16),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(state.currencyConversion?.convertedAmount.toStringAsFixed(2) ?? '',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    ),
-                  ) : const SizedBox.shrink(),
-                  50.verticalSpace,
-                  ElevatedButton(
-                    onPressed: amountNotifier.isFormValid
-                        ? () {
-                            amountNotifier.convertCurrency(
-                              fromCurrency: state.fromCurrency,
-                          toCurrency: state.toCurrency,
-                        );
-                    
-                    } : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: amountNotifier.isFormValid ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSurface,
-                      minimumSize: const Size(double.infinity, 56),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
-                      ),
-                    ),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
+                      child: Text(
+                        'Convert',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ),
-      
+      ),
     );
   }
 
-  Widget _buildCurrencyInput({
+  Widget _buildCurrencyCard({
+    required bool isFrom,
     required TextEditingController controller,
-    required String amount,
     required String currencyCode,
-    required String flag,
     required List<ExchangeRateResponse> exchangeRates,
-    required bool isFromCurrency,
   }) {
-    // Helper function to get flag emoji
+    final state = ref.watch(convertCurrencyProvider);
+    
     String getFlagEmoji(String countryCode) {
+      if (countryCode.length < 2) return '';
       final int firstLetter = countryCode.codeUnitAt(0) - 0x41 + 0x1F1E6;
       final int secondLetter = countryCode.codeUnitAt(1) - 0x41 + 0x1F1E6;
       return String.fromCharCode(firstLetter) + String.fromCharCode(secondLetter);
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (isFromCurrency)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8),
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            isFrom ? 'From' : 'To',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.grey,
             ),
-            child: TextField(
-              controller: controller,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              enabled: isFromCurrency,
-              style: const TextStyle(fontSize: 24),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: '0.00',
+          ),
+          10.verticalSpace,
+          Row(
+            children: [
+              Expanded(
+                child: isFrom
+                    ? TextField(
+                        controller: controller,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        style: TextStyle(fontSize: 24.sp),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: '0.00',
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                        ],
+                        onChanged: (value) => ref.read(convertCurrencyProvider.notifier).setAmount(value),
+                      )
+                    : Text(
+                        state.currencyConversion?.convertedAmount.toStringAsFixed(2) ?? '0.00',
+                        style: TextStyle(fontSize: 24.sp),
+                      ),
               ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-              ],
-              onChanged: (value) {
-                final amountNotifier = ref.read(convertCurrencyProvider.notifier);
-                amountNotifier.setAmount(value);
-              },
-            ),
-          ),
-        
-        if (isFromCurrency) const SizedBox(height: 12),
-        
-        GestureDetector(
-          onTap: () async {
-            final selectedCurrency = await _showCurrencyPicker(context, exchangeRates);
-            if (selectedCurrency != null) {
-              final amountNotifier = ref.read(convertCurrencyProvider.notifier);
-              amountNotifier.updateSelectedCurrency(selectedCurrency, isFromCurrency);
-            }
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      getFlagEmoji(flag),
-                      style: const TextStyle(fontSize: 24),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      currencyCode,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ],
+              GestureDetector(
+                onTap: () async {
+                  final selectedCurrency = await _showCurrencyPicker(context, exchangeRates);
+                  if (selectedCurrency != null) {
+                    ref.read(convertCurrencyProvider.notifier)
+                        .updateSelectedCurrency(selectedCurrency, isFrom);
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        getFlagEmoji(currencyCode.substring(0, 2)),
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      8.horizontalSpace,
+                      Text(
+                        currencyCode,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      8.horizontalSpace,
+                      const Icon(Icons.keyboard_arrow_down, size: 20),
+                    ],
+                  ),
                 ),
-                const Icon(Icons.keyboard_arrow_down),
-              ],
-            ),
+              ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
- 
   Future<ExchangeRateResponse?> _showCurrencyPicker(BuildContext context, List<ExchangeRateResponse> exchangeRates) {
     String getFlagEmoji(String countryCode) {
       final int firstLetter = countryCode.codeUnitAt(0) - 0x41 + 0x1F1E6;
