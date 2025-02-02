@@ -21,26 +21,31 @@ class HomePage extends ConsumerWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(16.0.w),
-          child: state.isLoading ? const LoadingWidget() : SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                state.isLoading
-                  ? const ShimmerContainer(width: 150, height: 40)
-                  : const Text(
-                      'Account',
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                    ),
-                const SizedBox(height: 16),
-              
-                  _buildBalanceCards(context, state.exchangeRates),
-                  
-                const SizedBox(height: 24),
-                
-                _buildTransactions(context, state.transactionHistory?.transactions ?? []),
-              ],
-            ),
-          ),
+          child: state.isLoading 
+            ? const LoadingWidget() 
+            : RefreshIndicator(
+                onRefresh: () async {
+                  await ref.read(homeNotifierProvider.notifier).refreshData();
+                },
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      state.isLoading
+                        ? const ShimmerContainer(width: 150, height: 40)
+                        : const Text(
+                            'Account',
+                            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                          ),
+                      const SizedBox(height: 16),
+                      _buildBalanceCards(context, state.exchangeRates),
+                      const SizedBox(height: 24),
+                      _buildTransactions(context, state.transactionHistory?.transactions ?? []),
+                    ],
+                  ),
+                ),
+              ),
         ),
       ),
     );

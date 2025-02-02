@@ -6,6 +6,6 @@ import 'package:wise/src/repository/exchange_rate_repository.dart';
 import 'package:wise/src/repository/transaction_repository.dart';
 
 
-final homeNotifierProvider = StateNotifierProvider<HomeNotifier, HomeState>((ref) {
+final homeNotifierProvider = StateNotifierProvider.autoDispose<HomeNotifier, HomeState>((ref) {
   return HomeNotifier(getIt<ExchangeRateRepository>(), getIt<TransactionRepository>());
 });

@@ -40,5 +40,11 @@ class HomeNotifier extends StateNotifier<HomeState> {
     );
     state = state.copyWith(isLoading: false);
   }
- 
+
+  Future<void> refreshData() async {
+    await Future.wait([
+      getExchangeRate(),
+      getTransactionHistory(),
+    ]);
+  }
 }
